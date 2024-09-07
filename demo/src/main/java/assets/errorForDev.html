@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông báo lỗi từ hệ thống</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background-color: #ff4d4d;
+            color: #ffffff;
+            padding: 10px;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .content {
+            padding: 20px;
+        }
+        .content h2 {
+            color: #333333;
+            font-size: 18px;
+        }
+        .content p {
+            font-size: 16px;
+            color: #333333;
+        }
+        .content pre {
+            background-color: #f4f4f4;
+            border: 1px solid #dddddd;
+            padding: 10px;
+            overflow: auto;
+            max-height: 200px;
+            font-size: 14px;
+            color: #ff4d4d;
+            white-space: pre-wrap;
+        }
+        .footer {
+            text-align: center;
+            padding: 10px;
+            font-size: 12px;
+            color: #777777;
+            border-top: 1px solid #dddddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1>Error message from the system</h1>
+        </div>
+        <div class="content">
+            <h2>Error details:</h2>
+            <p>An error occurred in your system. Here are the details of the error:</p>
+            <h3>Time of occurrence: {{timestamp}}</h3>
+            <h3>Affected users: {{user}}</h3>
+            <h3>Error description:</h3>
+            <pre>{{errorDescription}}</pre>
+            <p>Please check and fix errors as soon as possible to ensure smooth system operation.</p>
+        </div>
+        <div class="footer">
+            <p>&copy; 2024 Development Team. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
