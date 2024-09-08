@@ -23,7 +23,7 @@ public class CheckExists {
 
     public static boolean checkExistsEmailPhone(String email, String phone, ConDB con){
         try {
-            String query2 = "SELECT id FROM users WHERE email = ? OR phone = ? ";
+            String query2 = "SELECT id FROM users WHERE email = ? UNION SELECT id FROM users WHERE phone = ? ";
             PreparedStatement pre = con.connection.prepareStatement(query2);
             pre.setString(1, email);
             pre.setString(2, phone);

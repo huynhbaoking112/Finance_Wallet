@@ -259,7 +259,7 @@ public class Signup extends JFrame implements ActionListener {
             else if(CheckExists.checkExistsEmailPhone(email, phone, con1)){
                 JOptionPane.showMessageDialog(null, "Email or Phone is exists!");
             }
-
+            // Tạo user mới và wallet của nó
             else {
                 // Chống tấn công sql injection nếu nâng cấp lên bảo mật cấp procedure thì tốt hơn  (đã nâng cấp lên procedure)
                 // String query = "INSERT INTO users (name, father_name, dob, gender, email, marital_status, address, city, pincode, state) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
