@@ -13,6 +13,7 @@ import com.toedter.calendar.JDateChooser;
 import managerBank.Config.ConDB;
 import managerBank.utils.CheckExists;
 import managerBank.utils.EmailSender;
+import managerBank.utils.HandlePassword;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -255,11 +256,13 @@ public class Signup extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, "Fill all the fields");
             }
             
+
             //Check email hay phone đã tồn tại chưa
             else if(CheckExists.checkExistsEmailPhone(email, phone, con1)){
                 JOptionPane.showMessageDialog(null, "Email or Phone is exists!");
             }
-            // Tạo user mới và wallet của nó
+
+             // Tạo user mới và wallet của nó
             else {
                 // Chống tấn công sql injection nếu nâng cấp lên bảo mật cấp procedure thì tốt hơn  (đã nâng cấp lên procedure)
                 // String query = "INSERT INTO users (name, father_name, dob, gender, email, marital_status, address, city, pincode, state) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -285,7 +288,7 @@ public class Signup extends JFrame implements ActionListener {
                 pstmt.setString(5, email);
                 pstmt.setString(6, marital);
                 pstmt.setString(7, address);
-                pstmt.setString(8, pin);
+                pstmt.setString(8, HandlePassword.hashPassword(pin));
 
 
                 // Thực thi câu lệnh

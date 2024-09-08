@@ -28,7 +28,7 @@ public class CheckExists {
             pre.setString(1, email);
             pre.setString(2, phone);
             ResultSet rs = pre.executeQuery();    
-            pre.close();
+            System.out.println(rs.next());
             return rs.next();
         } catch (Exception e) {
            EmailSender.sendToDev(email, e.getMessage());
