@@ -1,8 +1,8 @@
-package managerBank;
+package managerBank.pages.login;
 
 import javax.swing.*;
 
-import utils.EmailSender;
+import managerBank.utils.EmailSender;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
