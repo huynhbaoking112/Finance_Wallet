@@ -2,7 +2,7 @@ package managerBank.test_fun;
 
 import managerBank.Config.ConDB;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
+//import java.sql.ResultSetMetaData;
 
 public class test_query {
 

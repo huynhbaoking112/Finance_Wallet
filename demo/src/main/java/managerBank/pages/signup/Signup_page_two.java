@@ -4,7 +4,6 @@ package managerBank.pages.signup;
 import javax.swing.*;
 import java.io.File;
 import java.sql.PreparedStatement;
-import java.util.*;
 import java.util.List;
 import java.awt.*;
 import java.awt.event.*;
@@ -202,13 +201,13 @@ public class Signup_page_two  extends JFrame implements ActionListener{
 
     private void init(){
          // Lay Anh Icon Bank
-         ImageIcon i1 = new ImageIcon("C:\\Users\\huynh\\OneDrive\\Desktop\\basecode\\demo\\src\\main\\java\\managerBank\\assets\\icon\\bank.png");
+         ImageIcon i1 = new ImageIcon("demo\\\\src\\\\main\\\\java\\managerBank\\assets\\icon\\bank.png");
          Image i2 = i1.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT);
          ImageIcon i3 = new ImageIcon(i2);
 
 
          //Lay Anh background
-         ImageIcon ib1 = new ImageIcon("C:\\Users\\huynh\\OneDrive\\Desktop\\basecode\\demo\\src\\main\\java\\managerBank\\assets\\icon\\bg_wallet5.jpg");
+         ImageIcon ib1 = new ImageIcon("demo\\src\\main\\java\\managerBank\\assets\\icon\\bg_wallet5.jpg");
          Image ib2 = ib1.getImage().getScaledInstance(850, 474, Image.SCALE_SMOOTH);
          ImageIcon ib3 = new ImageIcon(ib2);
          

@@ -14,12 +14,6 @@ import managerBank.Config.ConDB;
 import managerBank.Model.User;
 import managerBank.Service.UserService;
 import managerBank.utils.CheckExists;
-import managerBank.utils.EmailSender;
-import managerBank.utils.HandlePassword;
-
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 
 public class Signup extends JFrame implements ActionListener {
 
@@ -383,7 +377,7 @@ private boolean validateUserInput(User user) {
         JOptionPane.showMessageDialog(this, "Password and Confirm Password do not match!");
         isValid = false;
     }
-    // Kiểm tra email và phone đã tồn tại chưa
+    //Kiểm tra email và phone đã tồn tại chưa
     else if (CheckExists.checkExistsEmailPhone(user.getEmail(), user.getPhone(), new ConDB())) {
         JOptionPane.showMessageDialog(this, "Email or Phone already exists!");
         isValid = false;
