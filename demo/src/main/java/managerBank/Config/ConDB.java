@@ -12,7 +12,7 @@ public class ConDB {
 
     public ConDB(){
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/walletSystem", "root", "123");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/walletSystem", "root", "King_112");
             statement = connection.createStatement();
         } catch (Exception e) {
             System.out.println("Loi tai connect DB");

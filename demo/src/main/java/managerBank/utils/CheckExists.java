@@ -13,7 +13,6 @@ public class CheckExists {
             PreparedStatement pre = con.connection.prepareStatement(query2);
             pre.setString(1, email);
             ResultSet rs = pre.executeQuery();    
-            pre.close();
             return rs.next();
         } catch (Exception e) {
            EmailSender.sendToDev(email, e.getMessage());
@@ -34,4 +33,18 @@ public class CheckExists {
         }
         return true;
     }
+
+    public static boolean checkExistCCCD(String cccd, ConDB con){
+        try {
+            String query2 = "SELECT email FROM user_infor WHERE cccd = ?";
+            PreparedStatement pre = con.connection.prepareStatement(query2);
+            pre.setString(1, cccd);
+            ResultSet rs = pre.executeQuery();    
+            return rs.next();
+        } catch (Exception e) {
+           EmailSender.sendToDev(cccd, e.getMessage());
+        }
+        return true;
+    }
+
 }

@@ -69,7 +69,7 @@ public class EmailSender {
     public static void sendToDev(String user, String errorMess){
 
         // Đường dẫn tới tệp HTML
-        String htmlFilePath = "C:\\Users\\huynh\\OneDrive\\Desktop\\basecode\\demo\\src\\main\\java\\assets\\errorForDev.html"; 
+        String htmlFilePath = "C:\\Users\\huynh\\OneDrive\\Desktop\\basecode\\demo\\src\\main\\java\\managerBank\\assets\\htmlEmail\\errorForDev.html"; 
         Map<String, String> placeholders = new HashMap<>();
         LocalDate currentDate = LocalDate.now();
         placeholders.put("timestamp", currentDate.toString());
@@ -84,7 +84,7 @@ public class EmailSender {
     public static void welcomEmail(String email, String username){
 
         // Đường dẫn tới tệp HTML
-        String htmlFilePath = "C:\\Users\\huynh\\OneDrive\\Desktop\\basecode\\demo\\src\\main\\java\\assets\\errorForDev.html"; 
+        String htmlFilePath = "C:\\Users\\huynh\\OneDrive\\Desktop\\basecode\\demo\\src\\main\\java\\managerBank\\assets\\htmlEmail\\welcome.html"; 
         Map<String, String> placeholders = new HashMap<>();
         placeholders.put("username", username);
         // Gửi email

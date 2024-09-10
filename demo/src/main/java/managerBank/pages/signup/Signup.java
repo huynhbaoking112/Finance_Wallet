@@ -236,7 +236,7 @@ public class Signup extends JFrame implements ActionListener {
 
     private void init(){
          // Lay Anh Icon Bank
-         ImageIcon i1 = new ImageIcon("C:\\Users\\tiend\\OneDrive\\Máy tính\\Finance_Wallet-main\\demo\\src\\main\\java\\managerBank\\assets\\icon\\bank.png");
+         ImageIcon i1 = new ImageIcon("C:\\Users\\huynh\\OneDrive\\Desktop\\basecode\\demo\\src\\main\\java\\managerBank\\assets\\icon\\bank.png");
          Image i2 = i1.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT);
          ImageIcon i3 = new ImageIcon(i2);
          // Set Icon Bank
@@ -324,8 +324,8 @@ public class Signup extends JFrame implements ActionListener {
                 pstmt.close();
                 con1.connection.close();
 
-                //Chuyển sang page 2
-                new Signup_page_two();
+                //Chuyển sang page 2(Nơi thực hiện các dịch vụ như bật thông báo thay đổi số dư, thay đổi hạn mức giao dịch, gửi file chưngs minh nhân dân và lưu vào cơ sở dữ liệu)
+                new Signup_page_two(email);
                 this.setVisible(false);
             }
         } catch (SQLException E) {
