@@ -11,6 +11,8 @@ import javax.swing.*;
 import com.toedter.calendar.JDateChooser;
 
 import managerBank.Config.ConDB;
+import managerBank.Model.User;
+import managerBank.Service.UserService;
 import managerBank.utils.CheckExists;
 import managerBank.utils.EmailSender;
 import managerBank.utils.HandlePassword;
@@ -252,87 +254,143 @@ public class Signup extends JFrame implements ActionListener {
          this.setVisible(true);
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
+    // @Override
+    // public void actionPerformed(ActionEvent e) {
 
-        String name = textName.getText();
-        String phone = textPhone.getText();
-        Date dob = dateChooser.getDate();
-        String gender = jRadioButton_male.isSelected() ? "male" : "female";
-        String email = textEmail.getText();
-        String marital = m1.isSelected() ? "Married" : m2.isSelected() ? "Unmarried" : "Other";
-        String address = textAddress.getText();
-        String password = textPass.getText();
-        String comfirmPassword = textComfirmPass.getText();
+    //     String name = textName.getText();
+    //     String phone = textPhone.getText();
+    //     Date dob = dateChooser.getDate();
+    //     String gender = jRadioButton_male.isSelected() ? "male" : "female";
+    //     String email = textEmail.getText();
+    //     String marital = m1.isSelected() ? "Married" : m2.isSelected() ? "Unmarried" : "Other";
+    //     String address = textAddress.getText();
+    //     String password = textPass.getText();
+    //     String comfirmPassword = textComfirmPass.getText();
 
 
-        try {
+    //     try {
 
-            //Connect DB
-            ConDB con1 = new ConDB();
+    //         //Connect DB
+    //         ConDB con1 = new ConDB();
 
-            //Check các trường đã được điền chưa
-            if (name.equals("") || phone.equals("") || gender.equals("") || email.equals("") || marital.equals("")
-                    || address.equals("") || password.equals("")|| dob == null) {
-                JOptionPane.showMessageDialog(null, "Fill all the fields");
-            }
-            // kiểm tra xem mật có trên 8 kí tự hay chưa
-            else if(password.length() < 8){
-                JOptionPane.showMessageDialog(null, "Password must be at least 8 character!!!");
-            }
-            else if(!password.equals(comfirmPassword)){
-                JOptionPane.showMessageDialog(null, "Password  and Comfirm Password is not same !!!");
-            }
-            //Check email hay phone đã tồn tại chưa
-            else if(CheckExists.checkExistsEmailPhone(email, phone, con1)){
-                JOptionPane.showMessageDialog(null, "Email or Phone is exists!");
-            }
+    //         //Check các trường đã được điền chưa
+    //         if (name.equals("") || phone.equals("") || gender.equals("") || email.equals("") || marital.equals("")
+    //                 || address.equals("") || password.equals("")|| dob == null) {
+    //             JOptionPane.showMessageDialog(null, "Fill all the fields");
+    //         }
+    //         // kiểm tra xem mật có trên 8 kí tự hay chưa
+    //         else if(password.length() < 8){
+    //             JOptionPane.showMessageDialog(null, "Password must be at least 8 character!!!");
+    //         }
+    //         else if(!password.equals(comfirmPassword)){
+    //             JOptionPane.showMessageDialog(null, "Password  and Comfirm Password is not same !!!");
+    //         }
+    //         //Check email hay phone đã tồn tại chưa
+    //         else if(CheckExists.checkExistsEmailPhone(email, phone, con1)){
+    //             JOptionPane.showMessageDialog(null, "Email or Phone is exists!");
+    //         }
 
-             // Tạo user mới và wallet của nó
-            else {
-                // Chống tấn công sql injection nếu nâng cấp lên bảo mật cấp procedure thì tốt hơn  (đã nâng cấp lên procedure)
-                // String query = "INSERT INTO users (name, father_name, dob, gender, email, marital_status, address, city, passwordcode, state) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                // PreparedStatement pstmt = con1.connection.prepareStatement(query);
-                /*Một số ưu điểm của procedure hơn viết query thông thường
-                    - Được lưu trữ và biên dịch sẵn trên csdl hiệu suất cao hơn với viết query thông thường 
-                    - Giảm băng thông
-                    - Ẩn dấu query khi bị tấn công server
-                    - Dễ dàng thay đổi nghiệp vụ
-                */ 
-                String query = "CALL signInUser(?,?,?,?,?,?,?,?);";
-                PreparedStatement pstmt = con1.connection.prepareStatement(query);
+    //          // Tạo user mới và wallet của nó
+    //         else {
+    //             // Chống tấn công sql injection nếu nâng cấp lên bảo mật cấp procedure thì tốt hơn  (đã nâng cấp lên procedure)
+    //             // String query = "INSERT INTO users (name, father_name, dob, gender, email, marital_status, address, city, passwordcode, state) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    //             // PreparedStatement pstmt = con1.connection.prepareStatement(query);
+    //             /*Một số ưu điểm của procedure hơn viết query thông thường
+    //                 - Được lưu trữ và biên dịch sẵn trên csdl hiệu suất cao hơn với viết query thông thường 
+    //                 - Giảm băng thông
+    //                 - Ẩn dấu query khi bị tấn công server
+    //                 - Dễ dàng thay đổi nghiệp vụ
+    //             */ 
+    //             String query = "CALL signInUser(?,?,?,?,?,?,?,?);";
+    //             PreparedStatement pstmt = con1.connection.prepareStatement(query);
 
 
                 
-                pstmt.setString(1, name);
-                pstmt.setString(2, phone);
+    //             pstmt.setString(1, name);
+    //             pstmt.setString(2, phone);
                 
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                String dobStr = sdf.format(dob);
-                pstmt.setString(3, dobStr);
-                pstmt.setString(4, gender);
-                pstmt.setString(5, email);
-                pstmt.setString(6, marital);
-                pstmt.setString(7, address);
-                pstmt.setString(8, HandlePassword.hashPassword(password));
+    //             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    //             String dobStr = sdf.format(dob);
+    //             pstmt.setString(3, dobStr);
+    //             pstmt.setString(4, gender);
+    //             pstmt.setString(5, email);
+    //             pstmt.setString(6, marital);
+    //             pstmt.setString(7, address);
+    //             pstmt.setString(8, HandlePassword.hashPassword(password));
 
 
-                // Thực thi câu lệnh
-                pstmt.executeUpdate();
+    //             // Thực thi câu lệnh
+    //             pstmt.executeUpdate();
 
-                // Giải phóng
-                pstmt.close();
-                con1.connection.close();
+    //             // Giải phóng
+    //             pstmt.close();
+    //             con1.connection.close();
 
-                //Chuyển sang page 2(Nơi thực hiện các dịch vụ như bật thông báo thay đổi số dư, thay đổi hạn mức giao dịch, gửi file chưngs minh nhân dân và lưu vào cơ sở dữ liệu)
-                new Signup_page_two(email);
-                this.setVisible(false);
-            }
-        } catch (SQLException E) {
-            EmailSender.sendToDev("", E.getMessage());
-            JOptionPane.showMessageDialog(null, "Error occurred while inserting data: " + E.getMessage());
-        }
+    //             //Chuyển sang page 2(Nơi thực hiện các dịch vụ như bật thông báo thay đổi số dư, thay đổi hạn mức giao dịch, gửi file chưngs minh nhân dân và lưu vào cơ sở dữ liệu)
+    //             new Signup_page_two(email);
+    //             this.setVisible(false);
+    //         }
+    //     } catch (SQLException E) {
+    //         EmailSender.sendToDev("", E.getMessage());
+    //         JOptionPane.showMessageDialog(null, "Error occurred while inserting data: " + E.getMessage());
+    //     }
+    // }   
+@Override
+public void actionPerformed(ActionEvent e) {
+    UserService userService = new UserService();
+
+    String name = textName.getText();
+    String phone = textPhone.getText();
+    Date dob = dateChooser.getDate();
+    String gender = jRadioButton_male.isSelected() ? "male" : jRadioButton_female.isSelected() ? "female" : "";
+    String email = textEmail.getText();
+    String marital = m1.isSelected() ? "Married" : m2.isSelected() ? "Unmarried" : m3.isSelected() ? "Other" : "";
+    String address = textAddress.getText();
+    
+    String password = new String(textPass.getPassword());
+
+    String comfirmPassword = new String(textComfirmPass.getPassword());
+
+    // Tạo đối tượng User
+    User user = new User(name, phone, dob, gender, email, marital, address, password, comfirmPassword);
+
+    // Xác thực dữ liệu
+    boolean isValid = validateUserInput(user);
+
+    if (isValid) {
+        // Nếu thông tin hợp lệ, lưu vào cơ sở dữ liệu và chuyển sang trang 2
+        userService.signUp(user);
+        new Signup_page_two(email);
+        this.setVisible(false);
     }
+}
+
+private boolean validateUserInput(User user) {
+    boolean isValid = true;
+
+    // Kiểm tra các trường đã được điền chưa
+    if (user.getName().equals("") || user.getPhone().equals("") || user.getGender().equals("") || user.getEmail().equals("") || user.getMarital().equals("")
+            || user.getAddress().equals("") || user.getPassword().equals("") || user.getDob() == null) {
+        JOptionPane.showMessageDialog(this, "Fill all the fields");
+        isValid = false;
+    }
+    // Kiểm tra mật khẩu
+    else if (user.getPassword().length() < 8) {
+        JOptionPane.showMessageDialog(this, "Password must be at least 8 characters!");
+        isValid = false;
+    } 
+    else if (!user.getPassword().equals(user.getComfirmPassword())) {
+        JOptionPane.showMessageDialog(this, "Password and Confirm Password do not match!");
+        isValid = false;
+    }
+    // Kiểm tra email và phone đã tồn tại chưa
+    else if (CheckExists.checkExistsEmailPhone(user.getEmail(), user.getPhone(), new ConDB())) {
+        JOptionPane.showMessageDialog(this, "Email or Phone already exists!");
+        isValid = false;
+    }
+
+    return isValid;
+}
 
     public static void main(String[] args) {
         new Signup();
