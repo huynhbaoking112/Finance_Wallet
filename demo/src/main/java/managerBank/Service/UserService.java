@@ -6,13 +6,15 @@ import managerBank.Repo.UserRepo;
 
 public class UserService {
     //Connect DB
-    UserRepo con1;
+    UserRepo repo;
     public UserService(){
-        con1 = new UserRepo();
+        repo = new UserRepo();
     };
 
     public void signUp(User user){
-        con1.saveToDB(user);
+        repo.saveToDB(user);
     } 
+
+
 }
     

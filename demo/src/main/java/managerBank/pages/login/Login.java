@@ -2,9 +2,14 @@ package managerBank.pages.login;
 
 import javax.swing.*;
 
+import managerBank.Config.ConDB;
+import managerBank.Service.UserService;
+import managerBank.pages.dashboard.Dashboard;
 import managerBank.pages.signup.Signup;
+import managerBank.utils.CheckExists;
 import managerBank.utils.EmailSender;
-
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -136,15 +141,41 @@ public class Login extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        try {
-
+        try {            
             if (e.getSource() == jButton_signin) {
+
+                String email = cardField.getText();
+                String password = passwordField.getText();
+                ConDB con = new ConDB();
+
+                //Check các trường đã được điền chưa
+                if(email.equals("")||password.equals("")){
+                    JOptionPane.showMessageDialog(null, "Fill all the fields");
+                }
+                //check email va password co dung khong va tai khoan co duoc xac nhan chua
+                else if(!CheckExists.checkExistsEmail(email, con)){
+                    JOptionPane.showMessageDialog(null, "Email not exists");
+                }
+                else if(!CheckExists.checkPasswordCorrect(email, password, con)){
+                    JOptionPane.showMessageDialog(null, "Password is not correct");
+                }
+                else if(!CheckExists.checkActive(email, con)){
+                    JOptionPane.showMessageDialog(null, "Account locked or unverified");
+                }
+                //Sang trang
+                else{
+                    new Dashboard(email);
+                    this.setVisible(false);
+                }
+
+               
 
             } else if (e.getSource() == jButton_clear) {
                 cardField.setText("");
                 passwordField.setText("");
             } else if (e.getSource() == jButton_register) {
                 new Signup();
+                this.setVisible(false);
             }
 
         } catch (Exception E) {

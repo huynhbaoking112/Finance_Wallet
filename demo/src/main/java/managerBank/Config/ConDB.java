@@ -12,19 +12,14 @@ public class ConDB {
 
     public ConDB(){
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/walletSystem", "root", "123");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/walletSystem", "root", "King_112");
             statement = connection.createStatement();
         }  
         catch (Exception e1) {
         
-            System.out.println("Không thể kết nối toi Mysql cua dat, thử kết nối toi mysql cua king");
-            try {
-                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/walletSystem", "root", "King_112");
-                statement = connection.createStatement();
-            } catch (Exception e2) {
                 System.out.println("Không thể kết nối với database.");
-                EmailSender.sendToDev("", e2.getMessage());
-            }
+                EmailSender.sendToDev("", e1.getMessage());
+            
         }
     }
 }
