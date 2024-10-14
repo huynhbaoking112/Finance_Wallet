@@ -44,7 +44,7 @@ public class Login extends JFrame implements ActionListener {
         super("Bank Management System");
 
         // Lay Anh Icon Bank
-        ImageIcon i1 = new ImageIcon("C:\\Users\\huynh\\OneDrive\\Desktop\\basecode\\demo\\src\\main\\java\\managerBank\\assets\\icon\\bank.png");
+        ImageIcon i1 = new ImageIcon("src\\main\\java\\managerBank\\assets\\icon\\bank.png");
         Image i2 = i1.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT);
         ImageIcon i3 = new ImageIcon(i2);
         // Set Icon Bank
@@ -53,7 +53,7 @@ public class Login extends JFrame implements ActionListener {
         this.add(image);
 
         // Lay anh Icon card
-        ImageIcon pre_card = new ImageIcon("C:\\Users\\huynh\\OneDrive\\Desktop\\basecode\\demo\\src\\main\\java\\managerBank\\assets\\icon\\card.png");
+        ImageIcon pre_card = new ImageIcon("src\\main\\java\\managerBank\\assets\\icon\\card.png");
         Image handle_card = pre_card.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT);
         ImageIcon card = new ImageIcon(handle_card);
         // Set Icon card
@@ -122,7 +122,7 @@ public class Login extends JFrame implements ActionListener {
         this.add(jButton_register);
 
         // Lay anh background
-        ImageIcon pre_background = new ImageIcon("C:\\Users\\huynh\\OneDrive\\Desktop\\basecode\\demo\\src\\main\\java\\managerBank\\assets\\icon\\backbg.png");
+        ImageIcon pre_background = new ImageIcon("demo\\src\\main\\java\\managerBank\\assets\\icon\\backbg.png");
         Image handle_background = pre_background.getImage().getScaledInstance(850, 480, Image.SCALE_DEFAULT);
         ImageIcon icon_background = new ImageIcon(handle_background);
         // Set Icon background

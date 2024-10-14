@@ -14,7 +14,7 @@ public class Dashboard extends JFrame {
 
         
         // Lay anh background
-        ImageIcon pre_background = new ImageIcon("C:\\Users\\huynh\\OneDrive\\Desktop\\basecode\\demo\\src\\main\\java\\managerBank\\assets\\icon\\dashboard.png");
+        ImageIcon pre_background = new ImageIcon("src\\main\\java\\managerBank\\assets\\icon\\dashboard.png");
         Image handle_background = pre_background.getImage().getScaledInstance(1000, 800, Image.SCALE_SMOOTH);
         ImageIcon icon_background = new ImageIcon(handle_background);
         // Set Icon background

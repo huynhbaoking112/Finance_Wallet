@@ -232,7 +232,7 @@ public class Signup extends JFrame implements ActionListener {
 
     private void init(){
          // Lay Anh Icon Bank
-         ImageIcon i1 = new ImageIcon("C:\\Users\\huynh\\OneDrive\\Desktop\\basecode\\demo\\src\\main\\java\\managerBank\\assets\\icon\\bank.png");
+         ImageIcon i1 = new ImageIcon("src\\main\\java\\managerBank\\assets\\icon\\bank.png");
          Image i2 = i1.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT);
          ImageIcon i3 = new ImageIcon(i2);
          // Set Icon Bank
@@ -340,9 +340,7 @@ public void actionPerformed(ActionEvent e) {
     String email = textEmail.getText();
     String marital = m1.isSelected() ? "Married" : m2.isSelected() ? "Unmarried" : m3.isSelected() ? "Other" : "";
     String address = textAddress.getText();
-    
     String password = new String(textPass.getPassword());
-
     String comfirmPassword = new String(textComfirmPass.getPassword());
 
     // Tạo đối tượng User
