@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 
 import javax.swing.JOptionPane;
 
+
 import managerBank.Config.ConDB;
 import managerBank.Model.User;
 import managerBank.utils.EmailSender;
@@ -13,8 +14,12 @@ import managerBank.utils.HandlePassword;
 
 public class UserRepo {
     
-
+    private ConDB DBConect;
+    public ConDB getDBConect() {
+        return DBConect;
+    }
     public UserRepo(){
+        DBConect = new ConDB();
     }
     public void saveToDB(User user){
          // Chống tấn công sql injection nếu nâng cấp lên bảo mật cấp procedure thì tốt hơn  (đã nâng cấp lên procedure)
@@ -27,7 +32,7 @@ public class UserRepo {
                     - Dễ dàng thay đổi nghiệp vụ
                 */ 
         try {
-        ConDB DBConect = new ConDB();
+        
         String query = "CALL signInUser(?,?,?,?,?,?,?,?);";
                 PreparedStatement pstmt = DBConect.connection.prepareStatement(query);
 

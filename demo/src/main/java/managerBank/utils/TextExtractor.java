@@ -32,7 +32,7 @@ public class TextExtractor {
         Tesseract tesseract = new Tesseract();
         // Set path tới thư mục chứa tesseract.exe (nếu cần)
         tesseract.setDatapath(
-                "C:\\Users\\huynh\\OneDrive\\Desktop\\basecode\\demo\\src\\main\\java\\managerBank\\utils");
+                "demo\\src\\main\\java\\managerBank\\utils");
         tesseract.setLanguage("vie"); // Thiết lập ngôn ngữ tiếng Việt
 
         try {

@@ -3,13 +3,10 @@ package managerBank.pages.login;
 import javax.swing.*;
 
 import managerBank.Config.ConDB;
-import managerBank.Service.UserService;
 import managerBank.pages.dashboard.Dashboard;
 import managerBank.pages.signup.Signup;
 import managerBank.utils.CheckExists;
 import managerBank.utils.EmailSender;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -145,6 +142,7 @@ public class Login extends JFrame implements ActionListener {
             if (e.getSource() == jButton_signin) {
 
                 String email = cardField.getText();
+                @SuppressWarnings("deprecation")
                 String password = passwordField.getText();
                 ConDB con = new ConDB();
 

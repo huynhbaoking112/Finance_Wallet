@@ -225,9 +225,7 @@ public class Signup extends JFrame implements ActionListener {
         nextButton.setBounds(620, 640, 80, 30);
         nextButton.addActionListener(this);
         this.add(nextButton);
-
        init();
-
     }
 
     private void init(){
@@ -369,6 +367,12 @@ private boolean validateUserInput(User user) {
     // Kiểm tra mật khẩu
     else if (user.getPassword().length() < 8) {
         JOptionPane.showMessageDialog(this, "Password must be at least 8 characters!");
+        isValid = false;
+    } 
+    // kiem tra so dien thoai co du 10 so hay khong?
+    // kiem tra so dien thoai co bat dau bang so 0 ?
+    else if (user.getPhone().length() != 10 || user.getPhone().charAt(0) != '0') {
+        JOptionPane.showMessageDialog(this, "The phone number is not in the correct format");
         isValid = false;
     } 
     else if (!user.getPassword().equals(user.getComfirmPassword())) {
