@@ -2,24 +2,28 @@ package managerBank.pages.tranfer;
 
 import javax.swing.*;
 
+import managerBank.DTO.TranferRepond;
 import managerBank.DTO.UserDTO;
+import managerBank.Service.TransactionServer;
 import managerBank.Service.UserService;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.text.NumberFormat;
 import java.awt.event.MouseAdapter;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.*;
-import java.util.regex.Pattern;
-
 public class TransferUI extends JFrame {
 
-    public TransferUI() {
-
+    UserDTO senderAccount ;
+    UserDTO receiverAccount;
+    public TransferUI(String senderEmail) {
         UserService userService = new UserService();
+        TransactionServer transactionServer = new TransactionServer();
+        senderAccount = userService.findInfoByEmailOrPhone(senderEmail);// lấy thông tin người dùng
         // Thiết lập cửa sổ
         setTitle("Chuyển tiền");
         setSize(500, 700);
@@ -38,8 +42,8 @@ public class TransferUI extends JFrame {
 
         JPanel accountPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
         accountPanel.setBackground(Color.WHITE);
-
-        JLabel lblSourceAccount = new JLabel("123 4567 789");
+        String phone = senderAccount.getPhone();
+        JLabel lblSourceAccount = new JLabel(phone);
         lblSourceAccount.setFont(new Font("Arial", Font.PLAIN, 16));
 
         ImageIcon icon = new ImageIcon("demo\\src\\main\\java\\managerBank\\assets\\icon\\bank.png");
@@ -51,8 +55,10 @@ public class TransferUI extends JFrame {
 
         accountPanel.add(iconLabel);
         accountPanel.add(lblSourceAccount);
-
-        JLabel lblSourceBalance = new JLabel("100,000,000 VND");
+         NumberFormat numberFormat = NumberFormat.getInstance();
+        String formattedNumber = numberFormat.format(senderAccount.getUserBalance()) +" VND";
+      
+        JLabel lblSourceBalance = new JLabel(formattedNumber);
         lblSourceBalance.setFont(new Font("Arial", Font.BOLD, 24));
         lblSourceBalance.setForeground(new Color(255, 165, 0));
 
@@ -65,44 +71,49 @@ public class TransferUI extends JFrame {
         transferFormPanel.setLayout(new GridLayout(8, 1, 10, 10));
         transferFormPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        JTextField accountField = new JTextField("Số tài khoản");
+        JTextField receiverAccountField = new JTextField("Số tài khoản");
 
-        JTextField receiverAccountField = new JTextField(20);
-        receiverAccountField.setEditable(false);
+        JTextField receiverNameField = new JTextField(20);
+        receiverNameField.setEditable(false);
 
-        accountField.addMouseListener(new MouseAdapter() {
+        receiverAccountField.addMouseListener(new MouseAdapter() {
             boolean isFirstReceiverClick = true; // Biến kiểm tra lần chọn đầu tiên ô receiver
 
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (isFirstReceiverClick) {
-                    accountField.setText(""); // Xóa nội dung lần đầu tiên
+                    receiverAccountField.setText(""); // Xóa nội dung lần đầu tiên
                     isFirstReceiverClick = false; // Đặt lại trạng thái
                 }
             }
         });
-        accountField.addKeyListener(new KeyAdapter() {
+        receiverAccountField.addKeyListener(new KeyAdapter() {
 
             @Override
             public void keyReleased(KeyEvent e) {
-                String accountNumber = accountField.getText();
-
-                UserDTO userDTO = null;
-                if (accountNumber.length() > 9) {
-                    userDTO = userService.findInfoByEmail(accountNumber);
+                String accountNumber = receiverAccountField.getText();
+                accountNumber = accountNumber.replace(" ", "");
+                receiverAccountField.setText(accountNumber);
+                // Xử lý trường hợp người nhận trùng với người gửi
+                if(accountNumber.equals(senderEmail) || accountNumber.equals(senderAccount.getPhone())){
+                    return;
                 }
-                if (userDTO != null) {
-                    String receiverName = userDTO.getUserName();
+                
+                if (accountNumber.length() > 5) {
+                    receiverAccount = userService.findInfoByEmailOrPhone(accountNumber);
+                }
+                if (receiverAccount != null) {
+                    String receiverName = receiverAccount.getUserName();
                     receiverName = receiverName.toUpperCase();
-                    receiverAccountField.setText(receiverName);
+                    receiverNameField.setText(receiverName);
                 } else {
-                    receiverAccountField.setText("");
+                    receiverNameField.setText("");
                 }
             }
 
         });
 
-        JTextField amountField = new JTextField("Số tiền VND");
+        JTextField amountField = new JTextField("Số tiền: ");
         amountField.addMouseListener(new MouseAdapter() {
             boolean firstClick = true; // Biến để kiểm tra lần click đầu tiên
 
@@ -114,24 +125,28 @@ public class TransferUI extends JFrame {
                 }
             }
         });
+        // nó đang bình thường khi nhấn bằng english
         amountField.addKeyListener(new KeyAdapter() {
-
+            
+            @Override
+            public void keyPressed(KeyEvent e) {
+               char keyChar = e.getKeyChar();
+               if(!Character.isDigit(keyChar) && keyChar != '\b'){
+                e.consume();
+               }
+            }
+            @Override
+            public void keyTyped (KeyEvent e) {
+                char keyChar = e.getKeyChar();
+                if(!Character.isDigit(keyChar) && keyChar != '\b'){
+                 e.consume();
+                }
+             }
             @Override
             public void keyReleased(KeyEvent e) {
                 String amountFieldConten = amountField.getText();
-                amountFieldConten = amountFieldConten.replace(",", "");
-                amountFieldConten = amountFieldConten.replace(" VND", "");
-                amountFieldConten = amountFieldConten.replace(" VN", "");
-                System.out.println(amountFieldConten);
-                // Biểu thức chính quy để kiểm tra xem có chữ hoặc số không
-                Pattern pattern = Pattern.compile("[a-zA-Z]");
-                boolean hasLetterOrDigit = pattern.matcher(amountFieldConten).find();
-
-                if (hasLetterOrDigit) {
-                    amountFieldConten = amountFieldConten.replaceAll("[a-zA-Z]", "");
-
-                }
-
+                amountFieldConten = amountFieldConten.replaceAll("[^0-9]", "");
+              
                 if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
                     if (amountFieldConten.length() > 1) {
                         amountFieldConten = amountFieldConten.substring(0, amountFieldConten.length() - 1);
@@ -139,6 +154,10 @@ public class TransferUI extends JFrame {
                         amountFieldConten = "0";
                     }
                 }
+                   char keyChar = e.getKeyChar();
+               if(!Character.isDigit(keyChar) && keyChar != '\b'){
+                e.consume();
+               }
                 StringBuilder result = new StringBuilder();
 
                 // Duyệt qua từng ký tự trong chuỗi
@@ -149,15 +168,17 @@ public class TransferUI extends JFrame {
                     }
                     if ((amountFieldConten.charAt(i) >= 'a') && (amountFieldConten.charAt(i) <= 'z')
                             ||
-                            (amountFieldConten.charAt(i) >= 'A') && (amountFieldConten.charAt(i) <= 'Z')) {
-                        JOptionPane.showMessageDialog(amountField, "Vui lòng không nhập kí tự trong ô số tiền");
-                        if (amountFieldConten.length() > 1) {
-
-                            amountFieldConten = amountFieldConten.substring(0, amountFieldConten.length() - 1);
-                        } else {
-                            amountFieldConten = "0";
-                        }
-                        break;
+                       (amountFieldConten.charAt(i) >= 'A') && (amountFieldConten.charAt(i) <= 'Z')) {
+                            //  JOptionPane.showMessageDialog(amountField, "Vui lòng không nhập kí tự trong ô số tiền");
+                            if (amountFieldConten.length() > 1) {
+                                amountFieldConten = amountFieldConten.substring(0, amountFieldConten.length() - 1);
+                            } else {
+                                amountFieldConten = "0";
+                            }
+                        
+                            amountFieldConten = amountFieldConten+" VND";
+                            amountField.setText(amountFieldConten);
+                            return;
                     }
                     result.append(amountFieldConten.charAt(i));
                     dem++;
@@ -168,10 +189,9 @@ public class TransferUI extends JFrame {
                 }
 
                 amountFieldConten = result.reverse().toString(); // Trả về chuỗi đã chuyển đổi
-                System.out.println(amountFieldConten);
+               
                 if(amountFieldConten == null || amountFieldConten ==""){
-                    amountField.setText("Nhập số tiền");
-
+                    amountField.setText("Số tiền: ");
                     return;
 
                 }
@@ -193,35 +213,31 @@ public class TransferUI extends JFrame {
         for (String amount : amounts) {
             JButton amountButton = new JButton(amount);
             amountButton.addActionListener(new ActionListener() {
-                boolean isFirstAmountClick = true; // Biến kiểm tra lần chọn đầu tiên ô amount
-
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    if (isFirstAmountClick) {
-                        amountField.setText(""); // Xóa nội dung lần đầu tiên
-                        isFirstAmountClick = false; // Đặt lại trạng thái
-                    }
-
                     amountField.setText(amount.substring(0, amount.length())); // Gán giá trị nút vào amountField
                 }
             });
             amountButtonPanel.add(amountButton);
         }
         // nội dung chuyển tiền
-        JTextArea contentField = new JTextArea("Nội dung chuyển tiền", 3, 20);
+        JTextArea contentField = new JTextArea(senderAccount.getUserName()+ " chuyển tiền", 3, 20);
         contentField.setLineWrap(true);
         contentField.setWrapStyleWord(true);
         JScrollPane scrollPane = new JScrollPane(contentField);
 
         // Panel chứa các nút nội dung
-        JPanel contentButtonPanel = new JPanel(new GridLayout(1, 6, 10, 10));
-        String[] contents = { "mua hang", "chuc mung", "cafe", "an trua", "an toi", "tra no" };
+        JPanel contentButtonPanel = new JPanel(new GridLayout(1, 6, 5, 10));
+       
+        String[] contents = { "mua hàng", "chúc mừng", "cafe", "ăn trưa", "ăn tối", "trả nợ" };
+        String senderNameMessage = senderAccount.getUserName()+ " chuyển tiền ";
         for (String content : contents) {
             JButton contentButton = new JButton(content);
+            contentButton.setMargin(new Insets(1, 0, 1, 0));
             contentButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    contentField.setText(content); // Gán giá trị nút vào contentField
+                    contentField.setText(senderNameMessage + content); // Gán giá trị nút vào contentField
                 }
             });
             contentButtonPanel.add(contentButton);
@@ -231,9 +247,75 @@ public class TransferUI extends JFrame {
         JButton continueButton = new JButton("Tiếp tục");
         continueButton.setBackground(new Color(103, 58, 183));
         continueButton.setForeground(Color.WHITE);
+        continueButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                boolean checkTranferForm = isValid(receiverNameField.getText(), amountField.getText(), senderAccount.getUserBalance());
+                System.out.println(checkTranferForm);
+                if (checkTranferForm){
+                    String amountStr = amountField.getText();
+                    amountStr = amountStr.replaceAll("[a-zA-Z]", "");// loại bỏ các kí tự trong chuỗi
+                    amountStr= amountStr.replace(",", "");
+                   
+                    int amountMoney = Integer.parseInt(amountStr.trim());
+                    boolean tranferResult = transactionServer.transferMoney(senderEmail, receiverAccountField.getText(), amountMoney);
 
-        transferFormPanel.add(accountField);
+                    if (tranferResult){
+                        TranferRepond transactionBillResult =transactionServer.saveTransactionBill(senderAccount.getUserId(), receiverAccount.getUserId(), amountMoney, contentField.getText());
+                        if(transactionBillResult.getIsResult()){
+                            TranferRepond tranferBillRepond =new TranferRepond();
+                            tranferBillRepond.setAmount(amountMoney);
+                            tranferBillRepond.setSenderName(senderAccount.getUserName());
+                            tranferBillRepond.setSenderPhone(senderAccount.getPhone());
+
+                            tranferBillRepond.setReceiverName(receiverAccount.getUserName());
+                            tranferBillRepond.setIdTranferBill(transactionBillResult.getIdTranferBill());
+                            tranferBillRepond.setTranferMessage(contentField.getText());
+                            tranferBillRepond.setTranferBillDate(transactionBillResult.getTranferBillDate());
+                            System.out.println(transactionBillResult.getIsResult());
+                            new TransferConfirmationUI(tranferBillRepond);
+                            setVisible(false);
+                        }
+                    
+                    }
+                    }else{
+                        return;
+                    }
+            }
+            
+            boolean isValid(String receiverNameField, String amountStr, int senderBalance) {
+                
+                amountStr = amountStr.replaceAll("[a-zA-Z]", "");// loại bỏ các kí tự trong chuỗi
+                amountStr= amountStr.replace(",", "");
+            
+                if (receiverNameField == "" || receiverNameField == null) {
+            
+                    JOptionPane.showMessageDialog(null, "Người nhận không tồn tại");
+                    return false;
+                }
+                try {
+                // System.out.println("chuyenssss");
+                    int amountInt = Integer.parseInt(amountStr.trim());
+                    if (senderBalance < amountInt) {
+                    
+                        JOptionPane.showMessageDialog(null, "Số dư không đủ");
+                        return false;
+                    }
+                } catch (NumberFormatException e) {
+                    // System.out.println("Chuỗi không phải là số hợp lệ.");
+                
+                    return false;
+                }
+                return true;
+            }
+        });
+       
+
+
+
+
         transferFormPanel.add(receiverAccountField);
+        transferFormPanel.add(receiverNameField);
         transferFormPanel.add(amountField);
         transferFormPanel.add(amountButtonPanel);
         transferFormPanel.add(scrollPane);
@@ -242,39 +324,12 @@ public class TransferUI extends JFrame {
 
         add(sourcePanel, BorderLayout.NORTH);
         add(transferFormPanel, BorderLayout.CENTER);
-
         setVisible(true);
-
+      
     }
 
-    boolean isValid(String receiverNameField, String amountStr, int senderBalance) {
-        amountStr = amountStr.replace(",", "");
-        for (int i = 0; i < amountStr.length(); i++) {
-            if (!Character.isDigit(amountStr.toString().charAt(i))) {
-                JOptionPane.showMessageDialog(rootPane, "Vui lòng chỉ nhập số ở ô số tiền");
-                return false;
-            }
-        }
-        if (receiverNameField == "" || receiverNameField == null) {
-            JOptionPane.showMessageDialog(rootPane, "Người nhận không tồn tại");
-            return false;
-        }
-        try {
-            int amountInt = Integer.parseInt(amountStr);
-            if (senderBalance < amountInt) {
-                JOptionPane.showMessageDialog(rootPane, "Số dư không đủ");
-                return false;
-            }
-        } catch (NumberFormatException e) {
-            // System.out.println("Chuỗi không phải là số hợp lệ.");
-            return false;
-        }
-
-        return true;
-
-    }
 
     public static void main(String[] args) {
-        new TransferUI();
+        new TransferUI("tiendat1111");
     }
 }

@@ -1,6 +1,5 @@
 package managerBank.DTO;
 
-import com.mysql.cj.x.protobuf.MysqlxDatatypes.Scalar.String;
 
 /**
  * TranferRepond
@@ -14,6 +13,8 @@ public class TranferRepond {
     private String senderPhone;
     private String receiverPhone;
     private int amount;
+    private int idTranferBill;
+    private String tranferBillDate;
     private String tranferMessage;
     public TranferRepond() {
     }
@@ -28,7 +29,19 @@ public class TranferRepond {
         this.amount = amount;
         this.tranferMessage = tranferMessage;
     }
-    public boolean isResult() {
+    public int getIdTranferBill() {
+        return idTranferBill;
+    }
+    public void setIdTranferBill(int idTranferBill) {
+        this.idTranferBill = idTranferBill;
+    }
+    public String getTranferBillDate() {
+        return tranferBillDate;
+    }
+    public void setTranferBillDate(String tranferBillDate) {
+        this.tranferBillDate = tranferBillDate;
+    }
+    public boolean getIsResult() {
         return result;
     }
     public void setResult(boolean result) {

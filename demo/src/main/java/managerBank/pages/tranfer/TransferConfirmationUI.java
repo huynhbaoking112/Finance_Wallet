@@ -159,11 +159,19 @@
 
 package managerBank.pages.tranfer;
 import javax.swing.*;
+
+import managerBank.DTO.TranferRepond;
+
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.NumberFormat;
 
 public class TransferConfirmationUI {
+        public TransferConfirmationUI(){
 
-    public static void main(String[] args) {
+        }
+        public  TransferConfirmationUI( TranferRepond tranferRepond){
         // Tạo JFrame chính
         JFrame frame = new JFrame("TPBank Transfer Confirmation");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -182,15 +190,19 @@ public class TransferConfirmationUI {
         mainPanel.add(checkIcon);
 
         // Thông báo xác nhận
-        JLabel successLabel = new JLabel("Giao Dịch Đã Được TPBank Thực Hiện!");
-        successLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        JLabel successLabel = new JLabel("Giao Dịch Đã Được KDL WALLET Thực Hiện!");
+        successLabel.setFont(new Font("Arial", Font.BOLD, 16));
         successLabel.setForeground(new Color(98, 0, 238)); // Màu tím đậm
         successLabel.setHorizontalAlignment(SwingConstants.CENTER);
         successLabel.setBounds(50, 160, 350, 30); // Vị trí và kích thước
         mainPanel.add(successLabel);
 
-        // Số tiền chuyển
-        JLabel amountLabel = new JLabel("10,000 VND");
+            // Số tiền chuyển
+         NumberFormat numberFormat = NumberFormat.getInstance();
+        String formattedNumber = numberFormat.format(tranferRepond.getAmount()) +" VND";
+      
+      
+        JLabel amountLabel = new JLabel(formattedNumber);
         amountLabel.setFont(new Font("Arial", Font.BOLD, 36));
         amountLabel.setForeground(Color.BLACK);
         amountLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -198,12 +210,12 @@ public class TransferConfirmationUI {
         mainPanel.add(amountLabel);
 
         // Cảnh báo chờ phản hồi
-        JLabel warningLabel = new JLabel("Vui lòng đợi Ngân hàng Bạn phản hồi");
-        warningLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-        warningLabel.setForeground(new Color(255, 165, 0)); // Màu cam
-        warningLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        warningLabel.setBounds(70, 250, 300, 30); // Vị trí và kích thước
-        mainPanel.add(warningLabel);
+        JLabel sloganLabel = new JLabel("KDL Lựa chọn thông minh, lòng tin dẫn lối");
+        sloganLabel.setFont(new Font("Arial", Font.PLAIN, 15));
+        sloganLabel.setForeground(new Color( 150, 50, 0)); // Màu cam
+        sloganLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        sloganLabel.setBounds(70, 250, 300, 30); // Vị trí và kích thước
+        mainPanel.add(sloganLabel);
 
         // Các nút bấm: "Chia Sẻ Qua Email" và "Lưu Mẫu"
         JButton shareButton = new JButton("Chia Sẻ Qua Email");
@@ -228,19 +240,19 @@ public class TransferConfirmationUI {
         infoPanel.setBounds(30, 370, 380, 200); // Vị trí và kích thước
 
         // Thông tin giao dịch
-        JLabel senderInfo = new JLabel("   Người gửi: VU TIEN DAT - 4440 2042 004");
-        JLabel receiverInfo = new JLabel("   Người nhận: VU TIEN DAT - MB Bank");
+        JLabel senderInfo = new JLabel("   Người gửi: " + tranferRepond.getSenderName()+ " - "+ tranferRepond.getSenderPhone() );
+        JLabel receiverInfo = new JLabel("   Người nhận: "+ tranferRepond.getReceiverName() );
         JLabel transactionCode = new JLabel("   Mã giao dịch: 669V00924290AH9T");
-        JLabel transactionContent = new JLabel("   Nội dung: VU TIEN DAT chuyen tien");
+        JLabel transactionContent = new JLabel("   Nội dung: " + tranferRepond.getTranferMessage());
         JLabel transferMethod = new JLabel("   Cách thức: Chuyển tiền nhanh Napas 247");
-        JLabel transferTime = new JLabel("   Thời gian: 23:16:25, Ngày 16/10/2024");
+        JLabel transferTime = new JLabel("   Thời gian: " + tranferRepond.getTranferBillDate());
 
         senderInfo.setFont(new Font("Arial", Font.BOLD, 14));
-        receiverInfo.setFont(new Font("Arial", Font.PLAIN, 14));
-        transactionCode.setFont(new Font("Arial", Font.PLAIN, 14));
-        transactionContent.setFont(new Font("Arial", Font.PLAIN, 14));
-        transferMethod.setFont(new Font("Arial", Font.PLAIN, 14));
-        transferTime.setFont(new Font("Arial", Font.PLAIN, 14));
+        receiverInfo.setFont(new Font("Arial", Font.BOLD, 14));
+        transactionCode.setFont(new Font("Arial", Font.BOLD, 14));
+        transactionContent.setFont(new Font("Arial", Font.BOLD, 14));
+        transferMethod.setFont(new Font("Arial", Font.BOLD, 14));
+        transferTime.setFont(new Font("Arial", Font.BOLD, 14));
 
         infoPanel.add(senderInfo);
         infoPanel.add(receiverInfo);
@@ -256,6 +268,16 @@ public class TransferConfirmationUI {
         otherTransactionButton.setBackground(new Color(128, 0, 128));
         otherTransactionButton.setForeground(Color.WHITE);
         otherTransactionButton.setBounds(60, 600, 150, 40); // Vị trí và kích thước
+        otherTransactionButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(tranferRepond.getSenderPhone());
+               new TransferUI(tranferRepond.getSenderPhone());
+               frame.setVisible(false);
+            }
+            
+        });
         mainPanel.add(otherTransactionButton);
 
         JButton homeButton = new JButton("Trang Chủ");
@@ -268,5 +290,15 @@ public class TransferConfirmationUI {
         // Thêm Panel chính vào JFrame
         frame.add(mainPanel);
         frame.setVisible(true);
+    }
+        public static void main(String[] args) {
+            // TranferRepond tranferRepond = new TranferRepond();
+            // tranferRepond.setSenderName("Vu Tirn DAt");
+            // tranferRepond.setSenderPhone("03222777");
+            // tranferRepond.setReceiverName("King");
+            // tranferRepond.setReceiverPhone("0000000000000000");
+            // tranferRepond.setTranferMessage("test chuyen tien");
+            // tranferRepond.setAmount(500000);
+            // new TransferConfirmationUI(tranferRepond);
     }
 }
