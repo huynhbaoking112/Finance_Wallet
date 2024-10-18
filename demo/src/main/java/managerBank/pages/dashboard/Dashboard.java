@@ -10,6 +10,7 @@ public class Dashboard extends JFrame {
     }
 
     public void init() {
+
         // Lay anh background
         ImageIcon pre_background = new ImageIcon("demo\\src\\main\\java\\managerBank\\assets\\icon\\dashboard.png");
         Image handle_background = pre_background.getImage().getScaledInstance(1000, 800, Image.SCALE_SMOOTH);
@@ -25,6 +26,7 @@ public class Dashboard extends JFrame {
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
+
 
     public static void main(String[] args) {
         new Dashboard("King Huynh");

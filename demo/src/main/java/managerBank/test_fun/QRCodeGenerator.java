@@ -3,10 +3,10 @@ package managerBank.test_fun;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
-// import com.google.zxing.qrcode.encoder.QRCode;
-// import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.google.zxing.qrcode.encoder.QRCode;
 // import com.google.zxing.qrcode.encoder.QRCodeEncoder;
 
 import java.io.File;
@@ -22,7 +22,7 @@ public class QRCodeGenerator {
 
     public static void main(String[] args) {
         try {
-            generateQRCodeImage("king77nt54321@gmail.com", 350, 350, "demo\\src\\main\\java\\managerBank\\test_fun\\QRCode.png");
+            generateQRCodeImage("king77nt54321@gmail.com", 350, 350, "C:\\Users\\huynh\\OneDrive\\Desktop\\basecode\\demo\\src\\main\\java\\managerBank\\test_fun\\QRCode.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
