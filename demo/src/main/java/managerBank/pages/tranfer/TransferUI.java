@@ -330,6 +330,6 @@ public class TransferUI extends JFrame {
 
 
     public static void main(String[] args) {
-        new TransferUI("tiendat1111");
+        new TransferUI("king77nt54321@gmail.com");
     }
 }

@@ -1,4 +1,4 @@
-package managerBank.test_fun;
+package managerBank.utils;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class QRCodeReaderExample {
 
-    public static void readQRCode(String filePath) {
+    public static String readQRCode(String filePath) {
         try {
             File file = new File(filePath);
             BufferedImage bufferedImage = ImageIO.read(file);
@@ -35,10 +35,11 @@ public class QRCodeReaderExample {
             Reader reader = new MultiFormatReader();
             Result result = reader.decode(bitmap, hints);
 
-            System.out.println("QR Code text: " + result.getText());
+            return result.getText();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return "";
     }
 
     public static void main(String[] args) {

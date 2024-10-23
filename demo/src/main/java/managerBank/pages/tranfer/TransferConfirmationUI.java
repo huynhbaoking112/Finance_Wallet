@@ -292,13 +292,13 @@ public class TransferConfirmationUI {
         frame.setVisible(true);
     }
         public static void main(String[] args) {
-            // TranferRepond tranferRepond = new TranferRepond();
-            // tranferRepond.setSenderName("Vu Tirn DAt");
-            // tranferRepond.setSenderPhone("03222777");
-            // tranferRepond.setReceiverName("King");
-            // tranferRepond.setReceiverPhone("0000000000000000");
-            // tranferRepond.setTranferMessage("test chuyen tien");
-            // tranferRepond.setAmount(500000);
-            // new TransferConfirmationUI(tranferRepond);
+            TranferRepond tranferRepond = new TranferRepond();
+            tranferRepond.setSenderName("Vu Tirn DAt");
+            tranferRepond.setSenderPhone("03222777");
+            tranferRepond.setReceiverName("King");
+            tranferRepond.setReceiverPhone("0000000000000000");
+            tranferRepond.setTranferMessage("test chuyen tien");
+            tranferRepond.setAmount(500000);
+            new TransferConfirmationUI(tranferRepond);
     }
 }
