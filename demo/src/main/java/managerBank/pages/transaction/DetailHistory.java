@@ -1,32 +1,32 @@
+package managerBank.pages.transaction;
 
-package managerBank.pages.tranfer;
 import javax.swing.*;
 
 import managerBank.DTO.TranferRepond;
 import managerBank.DTO.UserDTO;
 import managerBank.Service.UserService;
 import managerBank.pages.dashboard.Dashboard;
+import managerBank.pages.tranfer.TransferUI;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 
-public class TransferConfirmationUI {
+public class DetailHistory {
         UserDTO senderUser ;
         UserDTO receiverUser;
         UserService userService;
-        public TransferConfirmationUI(){
+        public DetailHistory(){
 
         }
-        public  TransferConfirmationUI( TranferRepond tranferRepond){
+        public  DetailHistory( TranferRepond tranferRepond){
         // Tạo JFrame chính
         userService = new UserService();
         senderUser = userService.findUserbyID(tranferRepond.getIdSender());
         receiverUser = userService.findUserbyID(tranferRepond.getIdReceiver());
         JFrame frame = new JFrame("KDL WALLET Transfer Confirmation");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setBounds(550, 150, 450, 800);
+        frame.setBounds(550, 150, 450, 700);
       //  frame.setSize(450, 800);
         frame.setLayout(new BorderLayout());
 
@@ -115,34 +115,7 @@ public class TransferConfirmationUI {
         infoPanel.add(transferTime);
         mainPanel.add(infoPanel);
 
-        // Các nút điều hướng khác: "Giao Dịch Khác" và "Trang Chủ"
-        JButton otherTransactionButton = new JButton("Giao Dịch Khác");
-        otherTransactionButton.setFont(new Font("Arial", Font.PLAIN, 14));
-        otherTransactionButton.setBackground(new Color(128, 0, 128));
-        otherTransactionButton.setForeground(Color.WHITE);
-        otherTransactionButton.setBounds(60, 600, 150, 40); // Vị trí và kích thước
-        otherTransactionButton.addActionListener(new ActionListener() {
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-    
-               new TransferUI(senderUser.getUserEmail());
-               frame.setVisible(false);
-            }
-            
-        });
-        mainPanel.add(otherTransactionButton);
-
-        JButton homeButton = new JButton("Trang Chủ");
-        homeButton.setFont(new Font("Arial", Font.PLAIN, 14));
-        homeButton.setBackground(new Color(128, 0, 128));
-        homeButton.setForeground(Color.WHITE);
-        homeButton.setBounds(230, 600, 150, 40); // Vị trí và kích thước
-        homeButton.addActionListener(e ->{
-            frame.setVisible(false);
-            new Dashboard(senderUser.getUserEmail());
-        });
-        mainPanel.add(homeButton);
 
         // Thêm Panel chính vào JFrame
         frame.add(mainPanel);
@@ -154,6 +127,8 @@ public class TransferConfirmationUI {
             tranferRepond.setIdReceiver(18);
             tranferRepond.setTranferMessage("test chuyen tien");
             tranferRepond.setAmount(500000);
-            new TransferConfirmationUI(tranferRepond);
+            new DetailHistory(tranferRepond);
     }
 }
+
+

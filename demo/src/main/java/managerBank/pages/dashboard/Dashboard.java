@@ -5,9 +5,11 @@ import javax.swing.*;
 import managerBank.Config.ConDB;
 import managerBank.DTO.TranferRepond;
 import managerBank.Model.UserDashboard;
+import managerBank.pages.login.Login;
+import managerBank.pages.profile.Profile;
 import managerBank.pages.tranfer.TransferConfirmationUI;
 import managerBank.pages.tranfer.TransferUI;
-
+import managerBank.pages.transaction.TransactionFrame;
 import managerBank.Service.TransactionServer;
 import managerBank.utils.EmailSender;
 import managerBank.utils.QRCodeGenerator;
@@ -119,7 +121,7 @@ public class Dashboard extends JFrame {
 
         
         // Tạo field message
-        hiddenMessage = new JTextField();
+        hiddenMessage = new JTextField(" ");
         hiddenMessage.setBounds(329, 612, 264, 57); 
         hiddenMessage.setFont(new Font("Arial", Font.BOLD, 24));
 
@@ -141,9 +143,7 @@ public class Dashboard extends JFrame {
                 else if(hiddenAmount.getText().isEmpty()){
                     JOptionPane.showMessageDialog(null, "Fill all the fields");
                 }
-                else if(hiddenMessage.getText().isEmpty()){
-                    JOptionPane.showMessageDialog(null, "Fill all the fields");
-                }else{
+               else{
                     try {
                         // String query = "select id from users where phone = ?";
                         String selectQuery = "SELECT user_id, name, balance, version FROM walletsystem.users "+
@@ -177,6 +177,7 @@ public class Dashboard extends JFrame {
                         }
                     }
                     } catch (Exception ex) {
+                        System.out.println(ex.getMessage());
                         EmailSender.sendToDev(userDashboard.getEmail(),ex.getMessage());
                     }
                 }
@@ -189,12 +190,12 @@ public class Dashboard extends JFrame {
         //------------------------- Phần QR CODE ----------------------------------------
         
         // Tạo nút ẩn USE QR CODE
-         JButton hiddenButtonUse = new JButton();
-         hiddenButtonUse.setBounds(667, 413, 264, 57);
-         hiddenButtonUse.setContentAreaFilled(false);
-         hiddenButtonUse.setBorderPainted(false);
-         hiddenButtonUse.setFocusPainted(false);
-         hiddenButtonUse.addActionListener(e-> {
+         JButton dashboardButtonUse = new JButton();
+         dashboardButtonUse.setBounds(667, 413, 264, 57);
+         dashboardButtonUse.setContentAreaFilled(false);
+         dashboardButtonUse.setBorderPainted(false);
+         dashboardButtonUse.setFocusPainted(false);
+         dashboardButtonUse.addActionListener(e-> {
             JFileChooser fileChooser = new JFileChooser();
                 int returnValue = fileChooser.showOpenDialog(null);
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
@@ -226,16 +227,16 @@ public class Dashboard extends JFrame {
          });
  
          // Thêm nút vào JFrame
-         this.add(hiddenButtonUse);
+         this.add(dashboardButtonUse);
 
 
         // Tạo nút ẩn GET QR
-         JButton hiddenButtonGet = new JButton();
-         hiddenButtonGet.setBounds(667, 508, 264, 57);
-         hiddenButtonGet.setContentAreaFilled(false);
-         hiddenButtonGet.setBorderPainted(false);
-         hiddenButtonGet.setFocusPainted(false);
-         hiddenButtonGet.addActionListener(e-> {
+         JButton dashboardButtonGet = new JButton();
+         dashboardButtonGet.setBounds(667, 508, 264, 57);
+         dashboardButtonGet.setContentAreaFilled(false);
+         dashboardButtonGet.setBorderPainted(false);
+         dashboardButtonGet.setFocusPainted(false);
+         dashboardButtonGet.addActionListener(e-> {
             try {
                 QRCodeGenerator.generateQRCodeImage(userDashboard.getPhone(), 350, 350);
             } catch (Exception ex) {
@@ -243,69 +244,81 @@ public class Dashboard extends JFrame {
         });
  
          // Thêm nút vào JFrame
-         this.add(hiddenButtonGet);
+         this.add(dashboardButtonGet);
 
 
         //--------------------------Phần thanh bên trái-----------------------------------
 
         // Tạo nút ẩn Dashboard
-        JButton hiddenButton = new JButton();
-        hiddenButton.setBounds(22, 149, 174, 42);
-        hiddenButton.setContentAreaFilled(false);
-        hiddenButton.setBorderPainted(false);
-        hiddenButton.setFocusPainted(false);
-        hiddenButton.addActionListener(e-> System.out.println("king"));
+        JButton dashboardButton = new JButton();
+        dashboardButton.setBounds(45, 170, 174, 42);
+        dashboardButton.setContentAreaFilled(false);
+        dashboardButton.setBorderPainted(false);
+        dashboardButton.setFocusPainted(false);
+        dashboardButton.addActionListener(e-> {
+            setVisible(false);
+            new Dashboard(userDashboard.getEmail());
+        });
 
         // Thêm nút vào JFrame
-        this.add(hiddenButton);
+        this.add(dashboardButton);
 
         // Tạo nút ẩn Transaction
-        JButton hiddenButton2 = new JButton();
-        hiddenButton2.setBounds(22, 226, 174, 42);
-        hiddenButton2.setContentAreaFilled(false);
-        hiddenButton2.setBorderPainted(false);
-        hiddenButton2.setFocusPainted(false);
-        hiddenButton2.addActionListener(e -> 
+        JButton transactionButton = new JButton();
+        transactionButton.setBounds(45, 250, 174, 42);
+        transactionButton.setContentAreaFilled(false);
+        transactionButton.setBorderPainted(false);
+        transactionButton.setFocusPainted(false);
+        transactionButton.addActionListener(e -> 
         {
             setVisible(false);
             new TransferUI(userDashboard.getEmail());
         });
 
         // Thêm nút vào JFrame
-        this.add(hiddenButton2);
+        this.add(transactionButton);
 
         // Tạo nút ẩn Account
-        JButton hiddenButton3 = new JButton();
-        hiddenButton3.setBounds(22, 294, 174, 42);
-        hiddenButton3.setContentAreaFilled(false);
-        hiddenButton3.setBorderPainted(false);
-        hiddenButton3.setFocusPainted(false);
-        hiddenButton3.addActionListener(e-> System.out.println("king3"));
+        JButton historyButton = new JButton();
+        historyButton.setBounds(45, 320, 174, 42);
+        historyButton.setContentAreaFilled(false);
+        historyButton.setBorderPainted(false);
+        historyButton.setFocusPainted(false);
+        historyButton.addActionListener(e-> {
+            setVisible(false);
+            new TransactionFrame(userDashboard.getEmail(), userDashboard.getId());
+        });
 
         // Thêm nút vào JFrame
-        this.add(hiddenButton3);
+        this.add(historyButton);
 
         // Tạo nút ẩn Profile
-        JButton hiddenButton4 = new JButton();
-        hiddenButton4.setBounds(33, 445, 157, 63);
-        hiddenButton4.setContentAreaFilled(false);
-        hiddenButton4.setBorderPainted(false);
-        hiddenButton4.setFocusPainted(false);
-        hiddenButton4.addActionListener(e-> System.out.println("king4"));
+        JButton profileButton = new JButton();
+        profileButton.setBounds(55, 470, 157, 63);
+        profileButton.setContentAreaFilled(false);
+        profileButton.setBorderPainted(false);
+        profileButton.setFocusPainted(false);
+        profileButton.addActionListener(e-> {
+            setVisible(false);
+            new Profile(userDashboard.getEmail());
+        });
 
         // Thêm nút vào JFrame
-        this.add(hiddenButton4);
+        this.add(profileButton);
 
         // Tạo nút ẩn Logout
-        JButton hiddenButton5 = new JButton();
-        hiddenButton5.setBounds(33, 565, 157, 63);
-        hiddenButton5.setContentAreaFilled(false);
-        hiddenButton5.setBorderPainted(false);
-        hiddenButton5.setFocusPainted(false);
-        hiddenButton5.addActionListener(e-> System.out.println("king5"));
+        JButton logoutButton = new JButton();
+        logoutButton.setBounds(55, 590, 157, 63);
+        logoutButton.setContentAreaFilled(false);
+        logoutButton.setBorderPainted(false);
+        logoutButton.setFocusPainted(false);
+        logoutButton.addActionListener(e-> {
+            setVisible(false);
+            new Login();
+        });
 
         // Thêm nút vào JFrame
-        this.add(hiddenButton5);
+        this.add(logoutButton);
 
         init();
     }
@@ -349,6 +362,7 @@ public class Dashboard extends JFrame {
             }
 
 
+
         } catch (Exception e) {
             EmailSender.sendToDev(emailGet,e.getMessage());
         }
@@ -356,7 +370,7 @@ public class Dashboard extends JFrame {
     }
 
     public static void main(String[] args) {
-        new Dashboard("tienfat1111");
+        new Dashboard("king77nt54321@gmail.com");
     }
 }
 
