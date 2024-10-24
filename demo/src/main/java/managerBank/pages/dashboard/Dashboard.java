@@ -3,17 +3,16 @@ package managerBank.pages.dashboard;
 import javax.swing.*;
 
 import managerBank.Config.ConDB;
-import managerBank.DTO.TranferRequest;
+import managerBank.DTO.TranferRepond;
 import managerBank.Model.UserDashboard;
-
+import managerBank.pages.tranfer.TransferConfirmationUI;
 import managerBank.pages.tranfer.TransferUI;
 
 import managerBank.Service.TransactionServer;
-import managerBank.Service.UserService;
-import managerBank.utils.CheckExists;
 import managerBank.utils.EmailSender;
 import managerBank.utils.QRCodeGenerator;
 import managerBank.utils.QRCodeReaderExample;
+import managerBank.utils.ValidationBalance;
 
 import java.awt.*;
 import java.io.File;
@@ -43,7 +42,7 @@ public class Dashboard extends JFrame {
     UserDashboard userDashboard;
 
     public Dashboard(String email) {
-        
+    
         //-------- Lấy tất cả thông tin cần thiết-------------------
         getData(email);
         
@@ -73,7 +72,7 @@ public class Dashboard extends JFrame {
         amountTotal = new JLabel("********");
         amountTotal.setFont(new Font("Arial", Font.BOLD, 32));
         amountTotal.setForeground(Color.WHITE);
-        amountTotal.setBounds(462, 225, 160, 39);
+        amountTotal.setBounds(462, 225, 250, 39);
         
         // Thêm JLabel vào JFrame
         this.add(amountTotal);
@@ -89,28 +88,8 @@ public class Dashboard extends JFrame {
         eyeButton.addActionListener(e -> {
             display = !display;
             if(display){
-                StringBuilder result = new StringBuilder();
-
-                // Duyệt qua từng ký tự trong chuỗi
-                int dem = 0;
-                String sodu = Integer.toString(userDashboard.getBalance()) ;
-                for (int i = sodu.length() - 1; i >= 0; i--) {
-                    if (sodu.charAt(i) == ' ') {
-                        continue;
-                    }
-                    
-                    result.append(sodu.charAt(i));
-                    dem++;
-                    if (dem == 3) {
-                        result.append(".");
-                        dem = 0;
-                    }
-                }
-                sodu = result.reverse().toString();
-                if(sodu.charAt(0)=='.'){
-                    sodu= sodu.substring(1, sodu.length());
-
-                }
+               
+                String sodu = ValidationBalance.BalanceValidation(userDashboard.getBalance());
                 amountTotal.setText(sodu);
             }else{
                 amountTotal.setText("********");
@@ -155,15 +134,14 @@ public class Dashboard extends JFrame {
         sendMoney.setBorderPainted(false);
         sendMoney.setFocusPainted(false);
         sendMoney.addActionListener(e->{
-            System.out.println("h");
               //Check các trường đã được điền chưa
-                if(hiddenPayeeAddress.equals("")){
+                if(hiddenPayeeAddress.getText().isEmpty()){
                     JOptionPane.showMessageDialog(null, "Fill all the fields");
                 }
-                else if(hiddenAmount.equals("")){
+                else if(hiddenAmount.getText().isEmpty()){
                     JOptionPane.showMessageDialog(null, "Fill all the fields");
                 }
-                else if(hiddenMessage.equals("")){
+                else if(hiddenMessage.getText().isEmpty()){
                     JOptionPane.showMessageDialog(null, "Fill all the fields");
                 }else{
                     try {
@@ -178,17 +156,22 @@ public class Dashboard extends JFrame {
                     ResultSet rs = pre.executeQuery();
                     
                     if (rs.next()){
-                        System.out.println("batku");
+                        
                         int id = rs.getInt("user_id");
                         // TranferRequest trans = new TranferRequest(userDashboard.getId(), id, Integer.parseInt(hiddenAmount.getText()), hiddenMessage.getText());
                         TransactionServer transHandler =  new TransactionServer();
-                        Boolean tranSer = transHandler.transferMoney(userDashboard.getPhone(), hiddenPayeeAddress.getText() ,Integer.parseInt(hiddenAmount.getText()));
-                        System.out.println(tranSer);
+                        boolean tranSer = transHandler.transferMoney(userDashboard.getPhone(), hiddenPayeeAddress.getText() ,Integer.parseInt(hiddenAmount.getText()));
+                        
                         if(tranSer){
-                            transHandler.saveTransactionBill(userDashboard.getId(), id, Integer.parseInt(hiddenAmount.getText()), hiddenMessage.getText());
-                            JOptionPane.showMessageDialog(null, "Transaction Success!");
+
+                            TranferRepond tranferRepond = transHandler.saveTransactionBill(userDashboard.getId(), id, Integer.parseInt(hiddenAmount.getText()), hiddenMessage.getText());
+                           setVisible(false);
+                           System.out.println(tranferRepond.getAmount());
+                            new TransferConfirmationUI(tranferRepond);
+                           
                             getData(userDashboard.getEmail());
-                            amountTotal.setText(Integer.toString(userDashboard.getBalance()));
+                            
+                            amountTotal.setText(ValidationBalance.BalanceValidation(userDashboard.getBalance()));
                         }else{
                             JOptionPane.showMessageDialog(null, "Transaction Fail!");
                         }
@@ -360,9 +343,11 @@ public class Dashboard extends JFrame {
                 String phone = rs.getString("phone"); 
                 String email = rs.getString("email"); 
                 int balance = rs.getInt("balance"); 
+                
                 //Đưa dữ liệu vào userDashboard
                 userDashboard = new UserDashboard(id, name, phone, email, balance);
             }
+
 
         } catch (Exception e) {
             EmailSender.sendToDev(emailGet,e.getMessage());

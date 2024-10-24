@@ -48,7 +48,7 @@ public class TransactionServer {
               ResultSet rs = selectStmt.executeQuery();
   
               if (!rs.next()) {
-                  System.out.println("Sender account not found!");
+                //  System.out.println("Sender account not found!");
                   connection.rollback();
                   return false;
               }
@@ -58,7 +58,7 @@ public class TransactionServer {
               int fromVersion = rs.getInt("version");
   
               if (fromBalance < amount) {
-                  System.out.println("Insufficient balance!");
+                 // System.out.println("Insufficient balance!");
                   connection.rollback();
                   return false;
               }
@@ -69,7 +69,7 @@ public class TransactionServer {
               rs = selectStmt.executeQuery();
   
               if (!rs.next()) {
-                  System.out.println("Receiver account not found!");
+                 // System.out.println("Receiver account not found!");
                   connection.rollback();
                   return false;
               }
@@ -90,7 +90,7 @@ public class TransactionServer {
   
               int affectedRowsFrom = updateFromStmt.executeUpdate();
               if (affectedRowsFrom == 0) {
-                  System.out.println("Optimistic lock failed for sender account!");
+                 // System.out.println("Optimistic lock failed for sender account!");
                   connection.rollback();
                   retryCount--; // Giảm số lần thử
                   continue; // Thử lại
@@ -105,7 +105,7 @@ public class TransactionServer {
   
               int affectedRowsTo = updateToStmt.executeUpdate();
               if (affectedRowsTo == 0) {
-                  System.out.println("Optimistic lock failed for receiver account!");
+                 // System.out.println("Optimistic lock failed for receiver account!");
                   connection.rollback();
                   retryCount--; // Giảm số lần thử
                   continue; // Thử lại
@@ -113,7 +113,7 @@ public class TransactionServer {
   
               // Commit transaction nếu cả hai cập nhật thành công
               connection.commit();
-              System.out.println("Transaction successful!");
+             // System.out.println("Transaction successful!");
               return true;
   
           } catch (SQLException e) {
@@ -195,12 +195,12 @@ public class TransactionServer {
 
             int colum = preparedStatement.executeUpdate();
             if (colum == 0) {
-                System.out.println("Lưu hóa đơn không thành công");
+              //  System.out.println("Lưu hóa đơn không thành công");
                 tranferRepond.setResult(false);
                 return tranferRepond;
             } else {
                 
-                String billSQL = " SELECT ID, amount, message, time FROM walletsystem.transaction_log WHERE id_sender = ? AND id_received = ? ORDER BY ID DESC LIMIT 1";
+                String billSQL = " SELECT ID,id_sender,id_received, amount, message, time FROM walletsystem.transaction_log WHERE id_sender = ?  AND id_received = ? ORDER BY ID DESC LIMIT 1";
                
                 try(PreparedStatement billPreparedStatement = connection.prepareStatement(billSQL)){
                     billPreparedStatement.setInt(1, idSender);
@@ -216,6 +216,11 @@ public class TransactionServer {
                         tranferRepond.setResult(true);
                         tranferRepond.setIdTranferBill(IDbill);
                         tranferRepond.setTranferBillDate(billDate);
+                        tranferRepond.setIdSender(idSender);
+                        tranferRepond.setIdReceiver(idReceiver);
+                        tranferRepond.setAmount(amount);
+                        tranferRepond.setTranferMessage(rs.getString("message"));
+                        
                     }
                 }catch (SQLException e){
 
@@ -224,8 +229,9 @@ public class TransactionServer {
             }
             
         } catch (SQLException e) {
-            System.out.println("Loi SQL: " + e.getMessage());
+          //  System.out.println("Loi SQL: " + e.getMessage());
             tranferRepond.setResult(false);
+            
         }
 
         return tranferRepond;

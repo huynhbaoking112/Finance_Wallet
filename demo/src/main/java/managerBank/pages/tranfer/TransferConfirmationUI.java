@@ -161,6 +161,9 @@ package managerBank.pages.tranfer;
 import javax.swing.*;
 
 import managerBank.DTO.TranferRepond;
+import managerBank.DTO.UserDTO;
+import managerBank.Service.UserService;
+import managerBank.pages.dashboard.Dashboard;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -168,11 +171,17 @@ import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 
 public class TransferConfirmationUI {
+        UserDTO senderUser ;
+        UserDTO receiverUser;
+        UserService userService;
         public TransferConfirmationUI(){
 
         }
         public  TransferConfirmationUI( TranferRepond tranferRepond){
         // Tạo JFrame chính
+        userService = new UserService();
+        senderUser = userService.findUserbyID(tranferRepond.getIdSender());
+        receiverUser = userService.findUserbyID(tranferRepond.getIdSender());
         JFrame frame = new JFrame("KDL WALLET Transfer Confirmation");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setBounds(550, 150, 450, 800);
@@ -186,7 +195,7 @@ public class TransferConfirmationUI {
 
      //   Icon xác nhận 
      // logo vi
-       JLabel checkIcon = new JLabel(new ImageIcon("C:\\Users\\tiend\\OneDrive\\Máy tính\\ảnhnenchuyen.jpg")); // Thay thế bằng đường dẫn icon
+       JLabel checkIcon = new JLabel(new ImageIcon("demo\\src\\main\\java\\managerBank\\assets\\icon\\logoxacnhan.jpg")); 
         checkIcon.setBounds(170, 40, 100, 100); // Định vị trí và kích thước cho icon
         mainPanel.add(checkIcon);
 
@@ -242,8 +251,8 @@ public class TransferConfirmationUI {
 
         // Thông tin giao dịch
         
-        JLabel senderInfo = new JLabel("   Người gửi: " + tranferRepond.getSenderName()+ " - "+ tranferRepond.getSenderPhone() );
-        JLabel receiverInfo = new JLabel("   Người nhận: "+ tranferRepond.getReceiverName() );
+        JLabel senderInfo = new JLabel("   Người gửi: " + senderUser.getUserName()+ " - "+ senderUser.getPhone());
+        JLabel receiverInfo = new JLabel("   Người nhận: "+ receiverUser.getUserName());
         JLabel transactionCode = new JLabel("   Mã giao dịch: 669V00924290AH9T");
         JLabel transactionContent = new JLabel("   Nội dung: " + tranferRepond.getTranferMessage());
         JLabel transferMethod = new JLabel("   Cách thức: Chuyển tiền nhanh Napas 247");
@@ -274,8 +283,8 @@ public class TransferConfirmationUI {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(tranferRepond.getSenderPhone());
-               new TransferUI(tranferRepond.getSenderPhone());
+    
+               new TransferUI(senderUser.getUserEmail());
                frame.setVisible(false);
             }
             
@@ -287,6 +296,10 @@ public class TransferConfirmationUI {
         homeButton.setBackground(new Color(128, 0, 128));
         homeButton.setForeground(Color.WHITE);
         homeButton.setBounds(230, 600, 150, 40); // Vị trí và kích thước
+        homeButton.addActionListener(e ->{
+            frame.setVisible(false);
+            new Dashboard(senderUser.getUserEmail());
+        });
         mainPanel.add(homeButton);
 
         // Thêm Panel chính vào JFrame
@@ -295,10 +308,8 @@ public class TransferConfirmationUI {
     }
         public static void main(String[] args) {
             TranferRepond tranferRepond = new TranferRepond();
-            tranferRepond.setSenderName("Vu Tirn DAt");
-            tranferRepond.setSenderPhone("123456789");
-            tranferRepond.setReceiverName("King");
-            tranferRepond.setReceiverPhone("0000000000000000");
+            tranferRepond.setIdSender(21);
+        
             tranferRepond.setTranferMessage("test chuyen tien");
             tranferRepond.setAmount(500000);
             new TransferConfirmationUI(tranferRepond);

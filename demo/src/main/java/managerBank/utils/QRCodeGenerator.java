@@ -3,10 +3,8 @@ package managerBank.utils;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.qrcode.QRCodeWriter;
-import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
-import com.google.zxing.qrcode.encoder.QRCode;
 // import com.google.zxing.qrcode.encoder.QRCodeEncoder;
 
 import java.io.File;
@@ -17,7 +15,7 @@ import javax.swing.JFileChooser;
 public class QRCodeGenerator {
 
     public static void generateQRCodeImage(String text, int width, int height) throws WriterException, IOException {
-        System.out.println(text);
+       // System.out.println(text);
          // Hiển thị JFileChooser cho người dùng chọn vị trí và tên tệp
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Specify where to save the file");

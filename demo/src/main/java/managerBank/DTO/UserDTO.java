@@ -4,16 +4,25 @@ package managerBank.DTO;
 public class UserDTO {
     private int userId;
     private String userName;
-    private String phone;
-    
+    private String userPhone;
     private int userBalance;
-    
-    public UserDTO() {
-    }
-    public UserDTO(int userId, String userName, int userBalance) {
+    private String userEmail;
+    public UserDTO(int userId, String userName, String userPhone, int userBalance, String userEmail) {
         this.userId = userId;
         this.userName = userName;
+        this.userPhone = userPhone;
         this.userBalance = userBalance;
+        this.userEmail = userEmail;
+    }
+
+    public UserDTO() {
+    }
+    
+    public String getUserEmail() {
+        return userEmail;
+    }
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
     public int getUserBalance() {
         return userBalance;
@@ -34,10 +43,10 @@ public class UserDTO {
         this.userName = string;
     };
     public String getPhone() {
-        return phone;
+        return userPhone;
     }
     public void setPhone(String phone) {
-        this.phone = phone;
+        this.userPhone = phone;
     }
     
 }

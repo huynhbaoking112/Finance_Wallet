@@ -8,10 +8,9 @@ public class TranferRepond {
 
     private boolean result;
     private String erorMesage;
-    private String senderName;
-    private String receiverName;
-    private String senderPhone;
-    private String receiverPhone;
+    private int idSender;
+    private int idReceiver;
+    
     private int amount;
     private int idTranferBill;
     private String tranferBillDate;
@@ -19,15 +18,24 @@ public class TranferRepond {
     public TranferRepond() {
     }
     public TranferRepond(boolean result, String erorMesage, String senderName, String receiverName, String senderPhone,
-            String receiverPhone, int amount, String tranferMessage) {
+    String receiverPhone, int amount, String tranferMessage) {
         this.result = result;
         this.erorMesage = erorMesage;
-        this.senderName = senderName;
-        this.receiverName = receiverName;
-        this.senderPhone = senderPhone;
-        this.receiverPhone = receiverPhone;
+      
         this.amount = amount;
         this.tranferMessage = tranferMessage;
+    }
+    public int getIdSender() {
+        return idSender;
+    }
+    public void setIdSender(int idSender) {
+        this.idSender = idSender;
+    }
+    public int getIdReceiver() {
+        return idReceiver;
+    }
+    public void setIdReceiver(int idReceiver) {
+        this.idReceiver = idReceiver;
     }
     public int getIdTranferBill() {
         return idTranferBill;
@@ -53,30 +61,7 @@ public class TranferRepond {
     public void setErorMesage(String erorMesage) {
         this.erorMesage = erorMesage;
     }
-    public String getSenderName() {
-        return senderName;
-    }
-    public void setSenderName(String senderName) {
-        this.senderName = senderName;
-    }
-    public String getReceiverName() {
-        return receiverName;
-    }
-    public void setReceiverName(String receiverName) {
-        this.receiverName = receiverName;
-    }
-    public String getSenderPhone() {
-        return senderPhone;
-    }
-    public void setSenderPhone(String senderPhone) {
-        this.senderPhone = senderPhone;
-    }
-    public String getReceiverPhone() {
-        return receiverPhone;
-    }
-    public void setReceiverPhone(String receiverPhone) {
-        this.receiverPhone = receiverPhone;
-    }
+  
     public int getAmount() {
         return amount;
     }

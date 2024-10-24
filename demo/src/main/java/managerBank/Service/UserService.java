@@ -118,5 +118,31 @@ public class UserService {
         }
         return -1;
     }
+    public UserDTO findUserbyID(int id){
+        UserDTO userDTO = new UserDTO();
+        try {
+            String selectQuery = " SELECT user_id, name, balance, phone, email FROM walletsystem.wallet \n" + //
+                                    "LEFT JOIN users\n" + //
+                                    "ON wallet.id = users.id \n" + //
+                                    "WHERE users.id = ?";
+            PreparedStatement selectStmt = repo.getDBConect().connection.prepareStatement(selectQuery);
+            selectStmt.setInt(1, id);
+            ResultSet rs = selectStmt.executeQuery();
+            if(rs.next()){
+                userDTO.setUserName((String)rs.getString("name"));
+                userDTO.setUserEmail(rs.getString("email"));
+                userDTO.setPhone((String)rs.getString("phone"));
+                userDTO.setUserBalance(rs.getInt("balance"));
+                userDTO.setUserId(rs.getInt("user_id"));
+                return  userDTO;
+            }
+           // System.out.println("USER NOT FOUND IN USER Service in find by ID");
+            return null;
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
-    
+

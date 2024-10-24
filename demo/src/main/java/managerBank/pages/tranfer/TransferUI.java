@@ -252,7 +252,7 @@ public class TransferUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 boolean checkTranferForm = isValid(receiverNameField.getText(), amountField.getText(), senderAccount.getUserBalance());
-                System.out.println(checkTranferForm);
+                // System.out.println(checkTranferForm);
                 if (checkTranferForm){
                     String amountStr = amountField.getText();
                     amountStr = amountStr.replaceAll("[a-zA-Z]", "");// loại bỏ các kí tự trong chuỗi
@@ -264,17 +264,17 @@ public class TransferUI extends JFrame {
                     if (tranferResult){
                         TranferRepond transactionBillResult =transactionServer.saveTransactionBill(senderAccount.getUserId(), receiverAccount.getUserId(), amountMoney, contentField.getText());
                         if(transactionBillResult.getIsResult()){
-                            TranferRepond tranferBillRepond =new TranferRepond();
-                            tranferBillRepond.setAmount(amountMoney);
-                            tranferBillRepond.setSenderName(senderAccount.getUserName());
-                            tranferBillRepond.setSenderPhone(senderAccount.getPhone());
+                           // TranferRepond tranferBillRepond =new TranferRepond();
+                            // tranferBillRepond.setAmount(amountMoney);
+                            // tranferBillRepond.setSenderName(senderAccount.getUserName());
+                            // tranferBillRepond.setSenderPhone(senderAccount.getPhone());
 
-                            tranferBillRepond.setReceiverName(receiverAccount.getUserName());
-                            tranferBillRepond.setIdTranferBill(transactionBillResult.getIdTranferBill());
-                            tranferBillRepond.setTranferMessage(contentField.getText());
-                            tranferBillRepond.setTranferBillDate(transactionBillResult.getTranferBillDate());
-                            System.out.println(transactionBillResult.getIsResult());
-                            new TransferConfirmationUI(tranferBillRepond);
+                            // tranferBillRepond.setReceiverName(receiverAccount.getUserName());
+                            // tranferBillRepond.setIdTranferBill(transactionBillResult.getIdTranferBill());
+                            // tranferBillRepond.setTranferMessage(contentField.getText());
+                            // tranferBillRepond.setTranferBillDate(transactionBillResult.getTranferBillDate());
+
+                            new TransferConfirmationUI(transactionBillResult);
                             setVisible(false);
                         }
                     
@@ -316,6 +316,8 @@ public class TransferUI extends JFrame {
         backButton.setForeground(Color.WHITE);
         backButton.addActionListener(e -> {
             setVisible(false);
+            // System.out.println("trong back trong tranfer ui");
+            // System.out.println(senderEmail);
             new Dashboard(senderEmail);
         });
 
