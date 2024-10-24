@@ -6,6 +6,7 @@ import managerBank.DTO.TranferRepond;
 import managerBank.DTO.UserDTO;
 import managerBank.Service.TransactionServer;
 import managerBank.Service.UserService;
+import managerBank.pages.dashboard.Dashboard;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -310,7 +311,13 @@ public class TransferUI extends JFrame {
             }
         });
        
-
+        JButton backButton = new JButton("Back");
+        backButton.setBackground(new Color(205,100,0));
+        backButton.setForeground(Color.WHITE);
+        backButton.addActionListener(e -> {
+            setVisible(false);
+            new Dashboard(senderEmail);
+        });
 
 
 
@@ -321,7 +328,7 @@ public class TransferUI extends JFrame {
         transferFormPanel.add(scrollPane);
         transferFormPanel.add(contentButtonPanel);
         transferFormPanel.add(continueButton);
-
+        transferFormPanel.add(backButton);
         add(sourcePanel, BorderLayout.NORTH);
         add(transferFormPanel, BorderLayout.CENTER);
         setVisible(true);
