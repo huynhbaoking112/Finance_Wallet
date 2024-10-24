@@ -36,7 +36,7 @@ public class UserService {
                 userDTO.setUserId(rs.getInt("user_id"));
                 
             }else{
-                System.out.println("USER NOT FOUND");
+              //  System.out.println("USER NOT FOUND");
                 return null;
             }
             return  userDTO;
@@ -63,7 +63,7 @@ public class UserService {
                 userDTO.setUserId(rs.getInt("user_id"));
                 
             }else{
-                System.out.println("USER NOT FOUND");
+                //System.out.println("USER NOT FOUND");
                 return null;
             }
             return  userDTO;
@@ -87,7 +87,7 @@ public class UserService {
                 userDTO.setUserId(rs.getInt("user_id"));
                 return  userDTO;
             }
-            System.out.println("USER NOT FOUND IN USER Service in find by phone");
+           // System.out.println("USER NOT FOUND IN USER Service in find by phone");
             return null;
             
         } catch (SQLException e) {
@@ -110,7 +110,7 @@ public class UserService {
                 balance = rs.getInt("balance");
                 return  balance;
             }
-            System.out.println("USER NOT FOUND IN USER Service in get balance by phone");
+        //    System.out.println("USER NOT FOUND IN USER Service in get balance by phone");
             return -1;
             
         } catch (SQLException e) {

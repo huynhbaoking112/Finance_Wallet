@@ -173,9 +173,10 @@ public class TransferConfirmationUI {
         }
         public  TransferConfirmationUI( TranferRepond tranferRepond){
         // Tạo JFrame chính
-        JFrame frame = new JFrame("TPBank Transfer Confirmation");
+        JFrame frame = new JFrame("KDL WALLET Transfer Confirmation");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(450, 800);
+        frame.setBounds(550, 150, 450, 800);
+      //  frame.setSize(450, 800);
         frame.setLayout(new BorderLayout());
 
         // Tạo Panel chính
@@ -240,6 +241,7 @@ public class TransferConfirmationUI {
         infoPanel.setBounds(30, 370, 380, 200); // Vị trí và kích thước
 
         // Thông tin giao dịch
+        
         JLabel senderInfo = new JLabel("   Người gửi: " + tranferRepond.getSenderName()+ " - "+ tranferRepond.getSenderPhone() );
         JLabel receiverInfo = new JLabel("   Người nhận: "+ tranferRepond.getReceiverName() );
         JLabel transactionCode = new JLabel("   Mã giao dịch: 669V00924290AH9T");
@@ -292,13 +294,13 @@ public class TransferConfirmationUI {
         frame.setVisible(true);
     }
         public static void main(String[] args) {
-            // TranferRepond tranferRepond = new TranferRepond();
-            // tranferRepond.setSenderName("Vu Tirn DAt");
-            // tranferRepond.setSenderPhone("03222777");
-            // tranferRepond.setReceiverName("King");
-            // tranferRepond.setReceiverPhone("0000000000000000");
-            // tranferRepond.setTranferMessage("test chuyen tien");
-            // tranferRepond.setAmount(500000);
-            // new TransferConfirmationUI(tranferRepond);
+            TranferRepond tranferRepond = new TranferRepond();
+            tranferRepond.setSenderName("Vu Tirn DAt");
+            tranferRepond.setSenderPhone("123456789");
+            tranferRepond.setReceiverName("King");
+            tranferRepond.setReceiverPhone("0000000000000000");
+            tranferRepond.setTranferMessage("test chuyen tien");
+            tranferRepond.setAmount(500000);
+            new TransferConfirmationUI(tranferRepond);
     }
 }
