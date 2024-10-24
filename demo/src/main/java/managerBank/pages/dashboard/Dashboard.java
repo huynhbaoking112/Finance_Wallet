@@ -3,7 +3,11 @@ package managerBank.pages.dashboard;
 import javax.swing.*;
 
 import managerBank.Config.ConDB;
+import managerBank.DTO.TranferRequest;
 import managerBank.Model.UserDashboard;
+import managerBank.Service.TransactionServer;
+import managerBank.Service.UserService;
+import managerBank.utils.CheckExists;
 import managerBank.utils.EmailSender;
 import managerBank.utils.QRCodeGenerator;
 import managerBank.utils.QRCodeReaderExample;
@@ -112,7 +116,7 @@ public class Dashboard extends JFrame {
         
         // Tạo field message
         hiddenMessage = new JTextField();
-        hiddenMessage.setBounds(329, 508, 264, 57); 
+        hiddenMessage.setBounds(329, 612, 264, 57); 
         hiddenMessage.setFont(new Font("Arial", Font.BOLD, 24));
 
         // Thêm khung nhập vào JFrame
@@ -125,7 +129,41 @@ public class Dashboard extends JFrame {
         sendMoney.setContentAreaFilled(false);
         sendMoney.setBorderPainted(false);
         sendMoney.setFocusPainted(false);
-        sendMoney.addActionListener(e-> System.out.println("sendMoney"));
+        sendMoney.addActionListener(e->{
+              //Check các trường đã được điền chưa
+                if(hiddenPayeeAddress.equals("")){
+                    JOptionPane.showMessageDialog(null, "Fill all the fields");
+                }
+                else if(hiddenAmount.equals("")){
+                    JOptionPane.showMessageDialog(null, "Fill all the fields");
+                }
+                else if(hiddenMessage.equals("")){
+                    JOptionPane.showMessageDialog(null, "Fill all the fields");
+                }else{
+                    try {
+                        String query = "select id from users where phone = ?";
+                    PreparedStatement pre = conDB.connection.prepareStatement(query);
+                    pre.setString(1, hiddenPayeeAddress.getText());
+                    ResultSet rs = pre.executeQuery();
+                    
+                    if (rs.next()){
+                        int id = rs.getInt("id");
+                        // TranferRequest trans = new TranferRequest(userDashboard.getId(), id, Integer.parseInt(hiddenAmount.getText()), hiddenMessage.getText());
+                        TransactionServer transHandler =  new TransactionServer();
+                        Boolean tranSer = transHandler.transferMoney(userDashboard.getPhone(), hiddenPayeeAddress.getText() ,Integer.parseInt(hiddenAmount.getText()));
+                        if(tranSer){
+                            transHandler.saveTransactionBill(userDashboard.getId(), id, Integer.parseInt(hiddenAmount.getText()), hiddenMessage.getText());
+                        }else{
+                            JOptionPane.showMessageDialog(null, "Transaction Fail!");
+                        }
+                    }
+                    } catch (Exception ex) {
+                        EmailSender.sendToDev(userDashboard.getEmail(),ex.getMessage());
+                    }
+                }
+                
+                
+        });
 
         // Thêm nút gửi tiền vào JFrame
         this.add(sendMoney);
