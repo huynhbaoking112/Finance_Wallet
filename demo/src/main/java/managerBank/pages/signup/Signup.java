@@ -14,6 +14,7 @@ import managerBank.Config.ConDB;
 import managerBank.Model.User;
 import managerBank.Service.UserService;
 import managerBank.utils.CheckExists;
+import managerBank.utils.Validation;
 
 public class Signup extends JFrame implements ActionListener {
 
@@ -331,6 +332,7 @@ public void actionPerformed(ActionEvent e) {
     UserService userService = new UserService();
 
     String name = textName.getText();
+    name = Validation.NameValidation(name);
     String phone = textPhone.getText();
     Date dob = dateChooser.getDate();
     String gender = jRadioButton_male.isSelected() ? "male" : jRadioButton_female.isSelected() ? "female" : "";
