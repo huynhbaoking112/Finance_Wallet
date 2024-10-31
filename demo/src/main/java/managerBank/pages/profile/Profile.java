@@ -16,7 +16,7 @@ import managerBank.Service.TransactionServer;
 import managerBank.utils.EmailSender;
 import managerBank.utils.QRCodeGenerator;
 import managerBank.utils.QRCodeReaderExample;
-import managerBank.utils.ValidationBalance;
+import managerBank.utils.Validation;
 
 import java.awt.*;
 import java.io.File;

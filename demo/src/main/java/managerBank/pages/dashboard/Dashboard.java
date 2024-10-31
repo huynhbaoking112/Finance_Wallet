@@ -14,7 +14,7 @@ import managerBank.Service.TransactionServer;
 import managerBank.utils.EmailSender;
 import managerBank.utils.QRCodeGenerator;
 import managerBank.utils.QRCodeReaderExample;
-import managerBank.utils.ValidationBalance;
+import managerBank.utils.Validation;
 
 import java.awt.*;
 import java.io.File;
@@ -91,7 +91,7 @@ public class Dashboard extends JFrame {
             display = !display;
             if(display){
                
-                String sodu = ValidationBalance.BalanceValidation(userDashboard.getBalance());
+                String sodu = Validation.BalanceValidation(userDashboard.getBalance());
                 amountTotal.setText(sodu);
             }else{
                 amountTotal.setText("********");
@@ -171,7 +171,7 @@ public class Dashboard extends JFrame {
                            
                             getData(userDashboard.getEmail());
                             
-                            amountTotal.setText(ValidationBalance.BalanceValidation(userDashboard.getBalance()));
+                            amountTotal.setText(Validation.BalanceValidation(userDashboard.getBalance()));
                         }else{
                             JOptionPane.showMessageDialog(null, "Transaction Fail!");
                         }

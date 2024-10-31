@@ -1,6 +1,6 @@
 package managerBank.utils;
 
-public class ValidationBalance {
+public class Validation {
     public static String BalanceValidation (int number){
 
         String balance = Integer.toString(number);
@@ -47,5 +47,16 @@ public class ValidationBalance {
       
         return balance;
     }
-    
+    public static String NameValidation(String name){
+        name = name.strip();
+        StringBuilder result = new StringBuilder();
+        String[] words = name.split("\\s++");
+        for(String word : words){
+            result.append(word.toUpperCase())
+                .append(" ");
+        }
+
+
+        return result.toString().strip();
+    }
 }
