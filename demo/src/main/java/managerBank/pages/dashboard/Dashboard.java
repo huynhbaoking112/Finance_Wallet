@@ -91,8 +91,27 @@ public class Dashboard extends JFrame {
             display = !display;
             if(display){
                
-                String sodu = Validation.BalanceValidation(userDashboard.getBalance());
+                try {
+                    String query = "select u.id, u.name, u.phone, u.email, w.balance FROM users AS u JOIN (SELECT id from users WHERE email = ?) AS u2 ON u.id = u2.id JOIN wallet AS w ON u.id = w.user_id";
+                    PreparedStatement pre = conDB.connection.prepareStatement(query);
+                    pre.setString(1, userDashboard.getEmail());
+                    ResultSet rs = pre.executeQuery();
+                    
+                    if (rs.next()){
+                        int balance = rs.getInt("balance"); 
+                        
+                String sodu = Validation.BalanceValidation(balance);
                 amountTotal.setText(sodu);
+                       
+                    }
+        
+        
+        
+                } catch (Exception ex) {
+                    EmailSender.sendToDev(userDashboard.getEmail(),ex.getMessage());
+                }
+                
+
             }else{
                 amountTotal.setText("********");
             }

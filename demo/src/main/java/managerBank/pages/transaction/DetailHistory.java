@@ -75,6 +75,7 @@ public class DetailHistory {
         shareButton.setBackground(new Color(255, 165, 0));
         shareButton.setForeground(Color.WHITE);
         shareButton.setBounds(60, 300, 160, 40); // Vị trí và kích thước
+        
         mainPanel.add(shareButton);
 
         JButton saveButton = new JButton("Lưu Mẫu");
