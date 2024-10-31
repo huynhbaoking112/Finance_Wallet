@@ -4,6 +4,16 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
 import managerBank.Config.ConDB;
 import managerBank.DTO.TranferRepond;
 import managerBank.Model.UserDashboard;
@@ -16,6 +26,8 @@ import managerBank.utils.EmailSender;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -94,6 +106,8 @@ public class TransactionFrame extends JFrame {
         // Tạo JTable với model
         JTable table = new JTable(model);
 
+        
+
         // Không cho chỉnh sửa
         table.setEnabled(false);
 
@@ -162,6 +176,72 @@ public class TransactionFrame extends JFrame {
             }
         });
 
+           // Tạo nút xuất file pdf
+           JButton pdfButton = new JButton("Export PDF");
+           pdfButton.setForeground(Color.WHITE);
+           pdfButton.setBackground(Color.black);
+           pdfButton.setFont(new Font("Arial", Font.BOLD, 14));
+           pdfButton.setBounds(270, 100, 157, 40);
+           pdfButton.addActionListener(e -> {
+            // Tạo JFileChooser để người dùng chọn nơi lưu file
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Chọn nơi lưu file PDF");
+            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            
+            // Đặt tên file mặc định và định dạng cho file PDF
+            fileChooser.setSelectedFile(new java.io.File("transaction_history.pdf"));
+        
+            // Hiển thị hộp thoại để người dùng chọn nơi lưu file
+            int userSelection = fileChooser.showSaveDialog(this);
+        
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                // Lấy đường dẫn file do người dùng chọn
+                java.io.File fileToSave = fileChooser.getSelectedFile();
+                
+                // Đảm bảo file có phần mở rộng .pdf
+                String filePath = fileToSave.getAbsolutePath();
+                if (!filePath.toLowerCase().endsWith(".pdf")) {
+                    filePath += ".pdf";
+                }
+        
+                // Tiến hành ghi dữ liệu vào file PDF
+                Document document = new Document();
+                
+                try {
+                    PdfWriter.getInstance(document, new FileOutputStream(filePath));
+                    document.open();
+                    
+                    document.add(new Paragraph("Transaction History", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, Font.BOLD, BaseColor.BLUE)));
+                    document.add(new Paragraph(" ")); // Dòng trống
+                    
+                    PdfPTable pdfTable = new PdfPTable(table.getColumnCount());
+                    
+                    for (int i = 0; i < table.getColumnCount(); i++) {
+                        pdfTable.addCell(new PdfPCell(new Phrase(table.getColumnName(i), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12))));
+                    }
+                    
+                    for (int row = 0; row < table.getRowCount(); row++) {
+                        for (int col = 0; col < table.getColumnCount(); col++) {
+                            Object value = table.getValueAt(row, col);
+                            pdfTable.addCell(new PdfPCell(new Phrase(value != null ? value.toString() : "")));
+                        }
+                    }
+                    
+                    document.add(pdfTable);
+                    JOptionPane.showMessageDialog(this, "Xuất file PDF thành công!");
+                    
+                } catch (FileNotFoundException | DocumentException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(this, "Lỗi khi xuất file PDF: " + ex.getMessage());
+                } finally {
+                    document.close();
+                }
+            }
+        });
+        
+   
+           // Thêm nút vào JFrame
+           this.add(pdfButton);
         
         
         //--------------------------Phần thanh bên trái-----------------------------------
@@ -236,6 +316,8 @@ public class TransactionFrame extends JFrame {
 
         // Thêm nút vào JFrame
         this.add(logoutButton);
+       
+     
     }
 
     public void init() {
