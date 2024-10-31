@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import managerBank.Config.ConDB;
 
 public class CheckExists {
+
+    
     
     public static boolean checkExistsEmail(String email, ConDB con){
         try {

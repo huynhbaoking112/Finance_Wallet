@@ -4,6 +4,7 @@ import javax.swing.*;
 
 import managerBank.Config.ConDB;
 import managerBank.pages.dashboard.Dashboard;
+import managerBank.pages.signup.Confirm_account;
 import managerBank.pages.signup.Signup;
 import managerBank.utils.CheckExists;
 import managerBank.utils.EmailSender;
@@ -59,14 +60,14 @@ public class Login extends JFrame implements ActionListener {
         this.add(jLabel_card);
 
         // Welcome text
-        jLabel_welcome = new JLabel("WELCOME TO ATM");
+        jLabel_welcome = new JLabel("WELCOME TO KDL WALLET");
         jLabel_welcome.setForeground(Color.WHITE);
         jLabel_welcome.setFont(new Font("AvantGarde", Font.BOLD, 38));
-        jLabel_welcome.setBounds(230, 125, 450, 40);
+        jLabel_welcome.setBounds(230, 125, 600, 40);
         this.add(jLabel_welcome);
 
         // Card Text
-        jLabel_cardNo = new JLabel("Card No:");
+        jLabel_cardNo = new JLabel("Email:");
         jLabel_cardNo.setForeground(Color.WHITE);
         jLabel_cardNo.setFont(new Font("Ralway", Font.BOLD, 28));
         jLabel_cardNo.setBounds(150, 190, 375, 30);
@@ -79,7 +80,7 @@ public class Login extends JFrame implements ActionListener {
         this.add(cardField);
 
         // Pin text
-        jLabel_pin = new JLabel("PIN:");
+        jLabel_pin = new JLabel("Password:");
         jLabel_pin.setForeground(Color.WHITE);
         jLabel_pin.setFont(new Font("Ralway", Font.BOLD, 28));
         jLabel_pin.setBounds(150, 250, 375, 30);
@@ -117,6 +118,18 @@ public class Login extends JFrame implements ActionListener {
         jButton_register.setBounds(300, 350, 230, 30);
         jButton_register.addActionListener(this);
         this.add(jButton_register);
+       
+        // button Active
+        JButton jButton_verify = new JButton("Verify Account");
+        jButton_verify.setFont(new Font("Arial", Font.BOLD, 14));
+        jButton_verify.setForeground(Color.WHITE);
+        jButton_verify.setBackground(Color.black);
+        jButton_verify.setBounds(300, 400, 230, 30);
+        jButton_verify.addActionListener(e->{
+            this.setVisible(false);
+            new Confirm_account();
+        });
+        this.add(jButton_verify);
 
         // Lay anh background
         ImageIcon pre_background = new ImageIcon("demo\\src\\main\\java\\managerBank\\assets\\icon\\backbg.png");
