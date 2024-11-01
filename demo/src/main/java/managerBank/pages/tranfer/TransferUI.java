@@ -7,6 +7,7 @@ import managerBank.DTO.UserDTO;
 import managerBank.Service.TransactionServer;
 import managerBank.Service.UserService;
 import managerBank.pages.dashboard.Dashboard;
+import managerBank.utils.EmailSender;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -264,6 +265,7 @@ public class TransferUI extends JFrame {
                     if (tranferResult){
                         TranferRepond transactionBillResult =transactionServer.saveTransactionBill(senderAccount.getUserId(), receiverAccount.getUserId(), amountMoney, contentField.getText());
                         if(transactionBillResult.getIsResult()){
+                            EmailSender.transacEmail(senderAccount.getUserEmail(), senderAccount.getPhone(), receiverAccount.getPhone(), Integer.toString(amountMoney) , contentField.getText());
                             new TransferConfirmationUI(transactionBillResult);
                             setVisible(false);
                         }

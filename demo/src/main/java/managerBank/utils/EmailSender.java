@@ -69,7 +69,7 @@ public class EmailSender {
     public static void sendToDev(String user, String errorMess){
 
         // Đường dẫn tới tệp HTML
-        String htmlFilePath = "C:\\Users\\huynh\\OneDrive\\Desktop\\basecode\\demo\\src\\main\\java\\managerBank\\assets\\htmlEmail\\errorForDev.html"; 
+        String htmlFilePath = "demo\\src\\main\\java\\managerBank\\assets\\htmlEmail\\errorForDev.html"; 
         Map<String, String> placeholders = new HashMap<>();
         LocalDate currentDate = LocalDate.now();
         placeholders.put("timestamp", currentDate.toString());
@@ -84,11 +84,25 @@ public class EmailSender {
     public static void welcomEmail(String email, String username){
 
         // Đường dẫn tới tệp HTML
-        String htmlFilePath = "C:\\Users\\huynh\\OneDrive\\Desktop\\basecode\\demo\\src\\main\\java\\managerBank\\assets\\htmlEmail\\welcome.html"; 
+        String htmlFilePath = "demo\\src\\main\\java\\managerBank\\assets\\htmlEmail\\welcome.html"; 
         Map<String, String> placeholders = new HashMap<>();
         placeholders.put("username", username);
         // Gửi email
         sendEmail(email, "Welcome to KDL-Wallet", htmlFilePath, placeholders); 
+
+    }
+    //Phương thức gửi email chào mừng
+    public static void transacEmail(String email ,String sender_phone, String recevied_phone, String amount, String message){
+
+        // Đường dẫn tới tệp HTML
+        String htmlFilePath = "demo\\src\\main\\java\\managerBank\\assets\\htmlEmail\\transaction_email.html"; 
+        Map<String, String> placeholders = new HashMap<>();
+        placeholders.put("sender_phone", sender_phone);
+        placeholders.put("recevied_phone", recevied_phone);
+        placeholders.put("amount", amount);
+        placeholders.put("message", message);
+        // Gửi email
+        sendEmail(email, "Transaction KDL-Wallet", htmlFilePath, placeholders); 
 
     }
 

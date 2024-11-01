@@ -24,19 +24,18 @@ import java.sql.ResultSet;
 public class Dashboard extends JFrame {
     ConDB conDB = new ConDB();
 
-
     // Jlable số dư
     JLabel amountTotal;
-    
+
     // Biến hiển thị hay không hiển thị số dư
     boolean display = false;
-    
+
     // Địa chỉ gửi tiền đi
     JTextField hiddenPayeeAddress;
 
     // Số tiền gửi đi
     JTextField hiddenAmount;
-    
+
     // Tin nhắn gửi đi
     JTextField hiddenMessage;
 
@@ -44,15 +43,13 @@ public class Dashboard extends JFrame {
     UserDashboard userDashboard;
 
     public Dashboard(String email) {
-    
-        //-------- Lấy tất cả thông tin cần thiết-------------------
+
+        // -------- Lấy tất cả thông tin cần thiết-------------------
         getData(email);
-        
 
+        // --------------------------Phần my Account ---------------------
 
-        //--------------------------Phần my Account ---------------------
-
-        //Tạo JLabel cho tên
+        // Tạo JLabel cho tên
         JLabel nameLabel = new JLabel(userDashboard.getName());
         nameLabel.setBounds(461, 142, 189, 41);
         nameLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -70,61 +67,61 @@ public class Dashboard extends JFrame {
         // Thêm JLabel vào JFrame
         this.add(phoneLabel);
 
-        //Tạo JLable số dư 
+        // Tạo JLable số dư
         amountTotal = new JLabel("********");
         amountTotal.setFont(new Font("Arial", Font.BOLD, 32));
         amountTotal.setForeground(Color.WHITE);
         amountTotal.setBounds(462, 225, 250, 39);
-        
+
         // Thêm JLabel vào JFrame
         this.add(amountTotal);
 
         // Tạo JButton cho biểu tượng con mắt
-        JButton eyeButton = new JButton(new ImageIcon("demo\\src\\main\\java\\managerBank\\assets\\icon\\Eye.png")); // Thay đổi đường dẫn đến icon
+        JButton eyeButton = new JButton(new ImageIcon("demo\\src\\main\\java\\managerBank\\assets\\icon\\Eye.png")); // Thay
+                                                                                                                     // đổi
+                                                                                                                     // đường
+                                                                                                                     // dẫn
+                                                                                                                     // đến
+                                                                                                                     // icon
         eyeButton.setBounds(730, 225, 29, 29); // Kích thước nút có thể thay đổi nếu cần
         eyeButton.setContentAreaFilled(false);
         eyeButton.setBorderPainted(false);
         eyeButton.setFocusPainted(false);
-        
+
         // Thêm ActionListener cho nút mắt
         eyeButton.addActionListener(e -> {
             display = !display;
-            if(display){
-               
+            if (display) {
+
                 try {
                     String query = "select u.id, u.name, u.phone, u.email, w.balance FROM users AS u JOIN (SELECT id from users WHERE email = ?) AS u2 ON u.id = u2.id JOIN wallet AS w ON u.id = w.user_id";
                     PreparedStatement pre = conDB.connection.prepareStatement(query);
                     pre.setString(1, userDashboard.getEmail());
                     ResultSet rs = pre.executeQuery();
-                    
-                    if (rs.next()){
-                        int balance = rs.getInt("balance"); 
-                        
-                String sodu = Validation.BalanceValidation(balance);
-                amountTotal.setText(sodu);
-                       
-                    }
-        
-        
-        
-                } catch (Exception ex) {
-                    EmailSender.sendToDev(userDashboard.getEmail(),ex.getMessage());
-                }
-                
 
-            }else{
+                    if (rs.next()) {
+                        int balance = rs.getInt("balance");
+
+                        String sodu = Validation.BalanceValidation(balance);
+                        amountTotal.setText(sodu);
+
+                    }
+
+                } catch (Exception ex) {
+                    EmailSender.sendToDev(userDashboard.getEmail(), ex.getMessage());
+                }
+
+            } else {
                 amountTotal.setText("********");
             }
         }); // Cập nhật số dư khi nhấn nút
         this.add(eyeButton);
 
-        //-------------- Phần gửi tiền -------------------
-
-
+        // -------------- Phần gửi tiền -------------------
 
         // Tạo field payee
         hiddenPayeeAddress = new JTextField();
-        hiddenPayeeAddress.setBounds(329, 413, 264, 57); 
+        hiddenPayeeAddress.setBounds(329, 413, 264, 57);
         hiddenPayeeAddress.setFont(new Font("Arial", Font.BOLD, 24));
 
         // Thêm khung nhập vào JFrame
@@ -132,21 +129,19 @@ public class Dashboard extends JFrame {
 
         // Tạo field amount
         hiddenAmount = new JTextField();
-        hiddenAmount.setBounds(329, 508, 264, 57); 
+        hiddenAmount.setBounds(329, 508, 264, 57);
         hiddenAmount.setFont(new Font("Arial", Font.BOLD, 24));
 
         // Thêm khung nhập vào JFrame
         this.add(hiddenAmount);
 
-        
         // Tạo field message
         hiddenMessage = new JTextField(" ");
-        hiddenMessage.setBounds(329, 612, 264, 57); 
+        hiddenMessage.setBounds(329, 612, 264, 57);
         hiddenMessage.setFont(new Font("Arial", Font.BOLD, 24));
 
         // Thêm khung nhập vào JFrame
         this.add(hiddenMessage);
-
 
         // Nút gửi tiền
         JButton sendMoney = new JButton("");
@@ -154,119 +149,120 @@ public class Dashboard extends JFrame {
         sendMoney.setContentAreaFilled(false);
         sendMoney.setBorderPainted(false);
         sendMoney.setFocusPainted(false);
-        sendMoney.addActionListener(e->{
-              //Check các trường đã được điền chưa
-                if(hiddenPayeeAddress.getText().isEmpty()){
-                    JOptionPane.showMessageDialog(null, "Fill all the fields");
-                }
-                else if(hiddenAmount.getText().isEmpty()){
-                    JOptionPane.showMessageDialog(null, "Fill all the fields");
-                }
-               else{
-                    try {
-                        // String query = "select id from users where phone = ?";
-                        String selectQuery = "SELECT user_id, name, balance, version FROM walletsystem.users "+
-                        "LEFT JOIN walletsystem.wallet"+
-                        " ON wallet.id = users.id "+
-                        "WHERE users.email = ? or phone = ?";
+        sendMoney.addActionListener(e -> {
+            // Check các trường đã được điền chưa
+            if (hiddenPayeeAddress.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Fill all the fields");
+            } else if (hiddenAmount.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Fill all the fields");
+            } else {
+                try {
+                    // String query = "select id from users where phone = ?";
+                    String selectQuery = "SELECT user_id, name, balance, version FROM walletsystem.users " +
+                            "LEFT JOIN walletsystem.wallet" +
+                            " ON wallet.id = users.id " +
+                            "WHERE users.email = ? or phone = ?";
                     PreparedStatement pre = conDB.connection.prepareStatement(selectQuery);
                     pre.setString(1, hiddenPayeeAddress.getText());
                     pre.setString(2, hiddenPayeeAddress.getText());
                     ResultSet rs = pre.executeQuery();
-                    
-                    if (rs.next()){
-                        
-                        int id = rs.getInt("user_id");
-                        // TranferRequest trans = new TranferRequest(userDashboard.getId(), id, Integer.parseInt(hiddenAmount.getText()), hiddenMessage.getText());
-                        TransactionServer transHandler =  new TransactionServer();
-                        boolean tranSer = transHandler.transferMoney(userDashboard.getPhone(), hiddenPayeeAddress.getText() ,Integer.parseInt(hiddenAmount.getText()));
-                        
-                        if(tranSer){
 
-                            TranferRepond tranferRepond = transHandler.saveTransactionBill(userDashboard.getId(), id, Integer.parseInt(hiddenAmount.getText()), hiddenMessage.getText());
-                           setVisible(false);
-                           System.out.println(tranferRepond.getAmount());
+                    if (rs.next()) {
+
+                        int id = rs.getInt("user_id");
+                        // TranferRequest trans = new TranferRequest(userDashboard.getId(), id,
+                        // Integer.parseInt(hiddenAmount.getText()), hiddenMessage.getText());
+                        TransactionServer transHandler = new TransactionServer();
+                        boolean tranSer = transHandler.transferMoney(userDashboard.getPhone(),
+                                hiddenPayeeAddress.getText(), Integer.parseInt(hiddenAmount.getText()));
+
+                        if (tranSer) {
+
+                            TranferRepond tranferRepond = transHandler.saveTransactionBill(userDashboard.getId(), id,
+                                    Integer.parseInt(hiddenAmount.getText()), hiddenMessage.getText());
+                            setVisible(false);
+                            System.out.println(tranferRepond.getAmount());
                             new TransferConfirmationUI(tranferRepond);
-                           
+
                             getData(userDashboard.getEmail());
-                            
+
                             amountTotal.setText(Validation.BalanceValidation(userDashboard.getBalance()));
-                        }else{
+                        } else {
                             JOptionPane.showMessageDialog(null, "Transaction Fail!");
                         }
                     }
-                    } catch (Exception ex) {
-                        System.out.println(ex.getMessage());
-                        EmailSender.sendToDev(userDashboard.getEmail(),ex.getMessage());
-                    }
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                    EmailSender.sendToDev(userDashboard.getEmail(), ex.getMessage());
                 }
-                
-                
+            }
+
         });
 
         // Thêm nút gửi tiền vào JFrame
         this.add(sendMoney);
-        //------------------------- Phần QR CODE ----------------------------------------
-        
+        // ------------------------- Phần QR CODE
+        // ----------------------------------------
+
         // Tạo nút ẩn USE QR CODE
-         JButton dashboardButtonUse = new JButton();
-         dashboardButtonUse.setBounds(667, 413, 264, 57);
-         dashboardButtonUse.setContentAreaFilled(false);
-         dashboardButtonUse.setBorderPainted(false);
-         dashboardButtonUse.setFocusPainted(false);
-         dashboardButtonUse.addActionListener(e-> {
+        JButton dashboardButtonUse = new JButton();
+        dashboardButtonUse.setBounds(667, 413, 264, 57);
+        dashboardButtonUse.setContentAreaFilled(false);
+        dashboardButtonUse.setBorderPainted(false);
+        dashboardButtonUse.setFocusPainted(false);
+        dashboardButtonUse.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
-                int returnValue = fileChooser.showOpenDialog(null);
-                if (returnValue == JFileChooser.APPROVE_OPTION) {
-                    File selectedFile = fileChooser.getSelectedFile();
-                    String result = QRCodeReaderExample.readQRCode(selectedFile.getAbsolutePath());
-                    // hiddenPayeeAddress.setText(result);
-                    try {
-                        String query = "SELECT name from users where phone = ?";
-                        PreparedStatement pre = conDB.connection.prepareStatement(query);
-                        pre.setString(1, result);
-                        ResultSet rs = pre.executeQuery();
-                        if(rs.next()){
-                            String name = rs.getString("name");
-                            int confirmation = JOptionPane.showConfirmDialog(null,
-                            "Is the name " + name + " correct?", "Confirmation",
-                            JOptionPane.YES_NO_OPTION);
-                        
+            int returnValue = fileChooser.showOpenDialog(null);
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                String result = QRCodeReaderExample.readQRCode(selectedFile.getAbsolutePath());
+                // hiddenPayeeAddress.setText(result);
+                try {
+                    String query = "SELECT name from users where phone = ?";
+                    PreparedStatement pre = conDB.connection.prepareStatement(query);
+                    pre.setString(1, result);
+                    ResultSet rs = pre.executeQuery();
+                    if (rs.next()) {
+                        String name = rs.getString("name");
+                        int confirmation = JOptionPane.showConfirmDialog(null,
+                                "Is the name " + name + " correct?", "Confirmation",
+                                JOptionPane.YES_NO_OPTION);
+
                         // Kiểm tra phản hồi từ người dùng
                         if (confirmation == JOptionPane.YES_OPTION) {
-                            hiddenPayeeAddress.setText(result); 
+                            hiddenPayeeAddress.setText(result);
                         } else {
                             return;
-                        }                            
                         }
-                    } catch (Exception ex) {
-                        EmailSender.sendToDev(userDashboard.getEmail(),ex.getMessage());
                     }
+                } catch (Exception ex) {
+                    EmailSender.sendToDev(userDashboard.getEmail(), ex.getMessage());
                 }
-         });
- 
-         // Thêm nút vào JFrame
-         this.add(dashboardButtonUse);
+            }
+        });
 
+        // Thêm nút vào JFrame
+        this.add(dashboardButtonUse);
 
         // Tạo nút ẩn GET QR
-         JButton dashboardButtonGet = new JButton();
-         dashboardButtonGet.setBounds(667, 508, 264, 57);
-         dashboardButtonGet.setContentAreaFilled(false);
-         dashboardButtonGet.setBorderPainted(false);
-         dashboardButtonGet.setFocusPainted(false);
-         dashboardButtonGet.addActionListener(e-> {
+        JButton dashboardButtonGet = new JButton();
+        dashboardButtonGet.setBounds(667, 508, 264, 57);
+        dashboardButtonGet.setContentAreaFilled(false);
+        dashboardButtonGet.setBorderPainted(false);
+        dashboardButtonGet.setFocusPainted(false);
+        dashboardButtonGet.addActionListener(e -> {
             try {
                 QRCodeGenerator.generateQRCodeImage(userDashboard.getPhone(), 350, 350);
             } catch (Exception ex) {
-                EmailSender.sendToDev(userDashboard.getEmail(),ex.getMessage());            }
+                EmailSender.sendToDev(userDashboard.getEmail(), ex.getMessage());
+            }
         });
- 
-         // Thêm nút vào JFrame
-         this.add(dashboardButtonGet);
 
+        // Thêm nút vào JFrame
+        this.add(dashboardButtonGet);
 
-        //--------------------------Phần thanh bên trái-----------------------------------
+        // --------------------------Phần thanh bên
+        // trái-----------------------------------
 
         // Tạo nút ẩn Dashboard
         JButton dashboardButton = new JButton();
@@ -274,7 +270,7 @@ public class Dashboard extends JFrame {
         dashboardButton.setContentAreaFilled(false);
         dashboardButton.setBorderPainted(false);
         dashboardButton.setFocusPainted(false);
-        dashboardButton.addActionListener(e-> {
+        dashboardButton.addActionListener(e -> {
             setVisible(false);
             new Dashboard(userDashboard.getEmail());
         });
@@ -288,8 +284,7 @@ public class Dashboard extends JFrame {
         transactionButton.setContentAreaFilled(false);
         transactionButton.setBorderPainted(false);
         transactionButton.setFocusPainted(false);
-        transactionButton.addActionListener(e -> 
-        {
+        transactionButton.addActionListener(e -> {
             setVisible(false);
             new TransferUI(userDashboard.getEmail());
         });
@@ -303,7 +298,7 @@ public class Dashboard extends JFrame {
         historyButton.setContentAreaFilled(false);
         historyButton.setBorderPainted(false);
         historyButton.setFocusPainted(false);
-        historyButton.addActionListener(e-> {
+        historyButton.addActionListener(e -> {
             setVisible(false);
             new TransactionFrame(userDashboard.getEmail(), userDashboard.getId());
         });
@@ -317,7 +312,7 @@ public class Dashboard extends JFrame {
         profileButton.setContentAreaFilled(false);
         profileButton.setBorderPainted(false);
         profileButton.setFocusPainted(false);
-        profileButton.addActionListener(e-> {
+        profileButton.addActionListener(e -> {
             setVisible(false);
             new Profile(userDashboard.getEmail());
         });
@@ -331,7 +326,7 @@ public class Dashboard extends JFrame {
         logoutButton.setContentAreaFilled(false);
         logoutButton.setBorderPainted(false);
         logoutButton.setFocusPainted(false);
-        logoutButton.addActionListener(e-> {
+        logoutButton.addActionListener(e -> {
             setVisible(false);
             new Login();
         });
@@ -346,13 +341,13 @@ public class Dashboard extends JFrame {
 
         // Lay anh background
         ImageIcon pre_background = new ImageIcon("demo\\src\\main\\java\\managerBank\\assets\\icon\\background.jpg");
-        // Image handle_background = pre_background.getImage().getScaledInstance(1000, 800, Image.SCALE_SMOOTH);
+        // Image handle_background = pre_background.getImage().getScaledInstance(1000,
+        // 800, Image.SCALE_SMOOTH);
         // ImageIcon icon_background = new ImageIcon(handle_background);
         // Set Icon background
         JLabel jLabel_background = new JLabel(pre_background);
         jLabel_background.setBounds(0, 0, 1000, 800);
         this.add(jLabel_background);
-
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(1000, 800);
@@ -362,35 +357,31 @@ public class Dashboard extends JFrame {
         this.setVisible(true);
     }
 
-    public void getData(String emailGet){
+    public void getData(String emailGet) {
         try {
             String query = "select u.id, u.name, u.phone, u.email, w.balance FROM users AS u JOIN (SELECT id from users WHERE email = ?) AS u2 ON u.id = u2.id JOIN wallet AS w ON u.id = w.user_id";
             PreparedStatement pre = conDB.connection.prepareStatement(query);
             pre.setString(1, emailGet);
             ResultSet rs = pre.executeQuery();
-            
-            if (rs.next()){
+
+            if (rs.next()) {
                 int id = rs.getInt("id");
                 String name = rs.getString("name");
-                String phone = rs.getString("phone"); 
-                String email = rs.getString("email"); 
-                int balance = rs.getInt("balance"); 
-                
-                //Đưa dữ liệu vào userDashboard
+                String phone = rs.getString("phone");
+                String email = rs.getString("email");
+                int balance = rs.getInt("balance");
+
+                // Đưa dữ liệu vào userDashboard
                 userDashboard = new UserDashboard(id, name, phone, email, balance);
             }
 
-
-
         } catch (Exception e) {
-            EmailSender.sendToDev(emailGet,e.getMessage());
+            EmailSender.sendToDev(emailGet, e.getMessage());
         }
-        
+
     }
 
     public static void main(String[] args) {
         new Dashboard("king77nt54321@gmail.com");
     }
 }
-
-
