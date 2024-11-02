@@ -7,6 +7,7 @@ import managerBank.DTO.UserDTO;
 import managerBank.Service.UserService;
 import managerBank.pages.dashboard.Dashboard;
 import managerBank.pages.tranfer.TransferUI;
+import managerBank.utils.EmailSender;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -75,7 +76,10 @@ public class DetailHistory {
         shareButton.setBackground(new Color(255, 165, 0));
         shareButton.setForeground(Color.WHITE);
         shareButton.setBounds(60, 300, 160, 40); // Vị trí và kích thước
-        
+        shareButton.addActionListener(e->{
+          EmailSender.transacEmail(senderUser.getUserEmail(), senderUser.getPhone(), receiverUser.getPhone(), Integer.toString(tranferRepond.getAmount()), tranferRepond.getTranferMessage() );
+        });;
+
         mainPanel.add(shareButton);
 
         JButton saveButton = new JButton("Lưu Mẫu");

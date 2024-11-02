@@ -27,8 +27,8 @@ public class EmailSender {
         props.put("mail.smtp.starttls.enable", "true");
 
         // Xác thực email và mật khẩu
-        String username = "n22dccn146@student.ptithcm.edu.vn"; 
-        String password = "n22dccn146#200804"; 
+        String username = "n22dccn147@student.ptithcm.edu.vn"; 
+        String password = "n22dccn147#06012004"; 
 
         // Tạo session với thông tin đăng nhập
         Session session = Session.getInstance(props, new javax.mail.Authenticator() {
