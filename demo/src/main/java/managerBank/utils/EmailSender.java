@@ -28,7 +28,7 @@ public class EmailSender {
 
         // Xác thực email và mật khẩu
         String username = "n22dccn147@student.ptithcm.edu.vn"; 
-        String password = "n22dccn147#06012004"; 
+        String password = "n22dccn147#060104"; 
 
         // Tạo session với thông tin đăng nhập
         Session session = Session.getInstance(props, new javax.mail.Authenticator() {

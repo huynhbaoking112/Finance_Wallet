@@ -185,6 +185,7 @@ public class Signup_page_two  extends JFrame implements ActionListener{
                 pstmt.close();
                 con.connection.close();
 
+                EmailSender.welcomEmail(email, email);
                 //Thông báo đăng ký hoàn tất 
                 JOptionPane.showMessageDialog(null, "SignUp Success");
                 //Chuyển sang page đăng nhập 
