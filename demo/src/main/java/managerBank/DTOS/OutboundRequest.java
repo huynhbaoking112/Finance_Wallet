@@ -2,9 +2,11 @@ package managerBank.DTOS;
 
 import java.util.List;
 
+import managerBank.pagess.Network;
+
 public class OutboundRequest {
     public List<ProductDTO> danhSachSanPham;
-    public String tenNguoiXuatHang = "lenhutphuong";
+    public String tenNguoiXuatHang = Network.ten;
     public int tongHoaDon;
 
     public List<ProductDTO> getDanhSachSanPham() {
