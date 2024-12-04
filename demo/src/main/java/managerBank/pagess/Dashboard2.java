@@ -1,9 +1,27 @@
 package managerBank.pagess;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.List;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import managerBank.DTOS.ProductInfor;
 
 public class Dashboard2 extends  JFrame{
 
@@ -14,8 +32,91 @@ public class Dashboard2 extends  JFrame{
     JButton phieuNhap;
     JButton profile;
     JButton logout;
+    List<ProductInfor> listProductInfor;
+    JTable allProduct ;
+    JScrollPane scrollPane;
+    String[] columnName = {"ID", "ProductName","Category","Unit", "Price","Quantity"};
+    DefaultTableModel model;
+
+
+    private static HttpClient client = HttpClient.newHttpClient();
+
+ 
 
     public Dashboard2 (){
+        
+
+        try {
+            String uri = "http://" + Network.networkWork+":8080"+"/api/products/getall";
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(uri))
+                .header("Content-Type", "application/json")
+                .GET()
+                .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                ObjectMapper objectMapper = new ObjectMapper();
+                listProductInfor = objectMapper.readValue(response.body(), objectMapper.getTypeFactory().constructCollectionType(List.class,  ProductInfor.class));       
+               
+            } else {
+                System.err.println("Failed to fetch data. Status code: " + response.statusCode());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        model = new DefaultTableModel(columnName, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Không cho phép chỉnh sửa bất kỳ ô nào
+            }
+        };
+allProduct = new JTable(model);
+
+// Tùy chỉnh dữ liệu trong bảng
+allProduct.setFont(new Font("Segoe UI", Font.PLAIN, 14)); // Font của dữ liệu
+allProduct.setRowHeight(30); // Tăng chiều cao từng dòng
+allProduct.setForeground(Color.DARK_GRAY); // Màu chữ
+allProduct.setBackground(Color.WHITE); // Màu nền của bảng
+allProduct.setGridColor(Color.LIGHT_GRAY); // Màu đường kẻ
+
+// Tùy chỉnh header của bảng
+JTableHeader header = allProduct.getTableHeader();
+header.setFont(new Font("Segoe UI", Font.BOLD, 14)); // Chữ in đậm
+header.setForeground(Color.BLUE); // Màu chữ xanh
+header.setBackground(Color.LIGHT_GRAY); // Màu nền header (tuỳ chọn)
+header.setReorderingAllowed(false); // Không cho phép kéo đổi thứ tự cột
+
+// Cuộn bảng
+scrollPane = new JScrollPane(allProduct);
+scrollPane.setBounds(291, 336, 682, 417);
+this.add(scrollPane);
+// Căn giữa nội dung các ô trong bảng
+DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+centerRenderer.setHorizontalAlignment(SwingConstants.CENTER); // Căn giữa nội dung trong ô
+
+// Áp dụng renderer cho tất cả các cột
+for (int i = 0; i < allProduct.getColumnCount(); i++) {
+    allProduct.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+}
+
+// Thêm dữ liệu vào bảng
+for (ProductInfor item : listProductInfor) {
+    model.addRow(new Object[]{
+        item.getIdProduct(), 
+        item.getProductName(), 
+        item.getCategory(),
+        item.getDonViTinh(), 
+        item.getGiaBan(), 
+        item.getSoLuong()
+    });
+}
+
+    
+            
+                
+    
 
         dash = new JButton();
         dash.setBounds(45, 71, 174, 42);

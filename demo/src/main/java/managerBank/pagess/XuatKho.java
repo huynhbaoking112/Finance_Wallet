@@ -1,12 +1,18 @@
 package managerBank.pagess;
 
 import java.awt.Font;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 public class XuatKho extends JFrame {
     JTextField timf;
     JButton tim;
@@ -21,8 +27,34 @@ public class XuatKho extends JFrame {
     JButton phieuNhap;
     JButton profile;
     JButton logout;
-    public XuatKho (){
+    private static HttpClient client = HttpClient.newHttpClient();
+    
 
+
+    public void layDulieu(){
+        try {
+            String uri = "http://" + Network.networkWork+":8080"+"/api/products/getall";
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(uri))
+                .header("Content-Type", "application/json")
+                .GET()
+                .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                ObjectMapper objectMapper = new ObjectMapper();
+                // listProductInfor = objectMapper.readValue(response.body(), objectMapper.getTypeFactory().constructCollectionType(List.class,  ProductInfor.class));       
+               
+            } else {
+                System.err.println("Failed to fetch data. Status code: " + response.statusCode());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public XuatKho (){
+        
         // Nut tim kiem
         tim = new JButton();
         tim.setBounds(710, 85, 98, 44);
