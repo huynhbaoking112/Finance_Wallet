@@ -5,7 +5,7 @@ import java.util.List;
 public class InboundRequest {
     public List<ProductDTO> danhSachSanPham;
     public String tenNguoiNhapHang = "lenhutphuong";
-    
+    public int tongHoaDon;
     public List<ProductDTO> getDanhSachSanPham() {
         return danhSachSanPham;
     }
@@ -18,6 +18,14 @@ public class InboundRequest {
     public void setTenNguoiNhapHang(String tenNguoiNhapHang) {
         this.tenNguoiNhapHang = tenNguoiNhapHang;
     }
+    public int getTongHoaDon() {
+        return tongHoaDon;
+    }
+    public void setTongHoaDon(int tongHoaDon) {
+        this.tongHoaDon = tongHoaDon;
+    }
+
+    
 
     
 }

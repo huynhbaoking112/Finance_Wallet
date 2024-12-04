@@ -37,7 +37,6 @@ public class XuatKho extends JFrame {
     JButton tim;
     JTextField soluongf;
     JButton xuat;
-    JButton nhapHang;
     JTextField tongTienf;  
     JButton dash;
     JButton nhapKho;
@@ -47,6 +46,7 @@ public class XuatKho extends JFrame {
     JButton them;
     JButton profile;
     JButton logout;
+    int tongtien = 0;
     private static HttpClient client = HttpClient.newHttpClient();
     List<ProductInfor>listProductInfor;
     JScrollPane scrollPane;
@@ -194,7 +194,6 @@ public class XuatKho extends JFrame {
         tim.setBorderPainted(false);
         tim.setFocusPainted(false);
         tim.addActionListener(e -> {
-
             model.setRowCount(0);
             if(timf.getText().equals("")){
                 for (ProductInfor item : listProductInfor) {
@@ -232,6 +231,7 @@ public class XuatKho extends JFrame {
         them.setBorderPainted(false);
         them.setFocusPainted(false);
         them.addActionListener(e -> {
+            System.out.println("oke");
             if(productInfor==null){
                 JPanel panel = new JPanel();
                 panel.setBackground(new Color(255, 223, 186)); // Màu nền nhẹ nhàng (hơi vàng nhạt)
@@ -292,7 +292,7 @@ public class XuatKho extends JFrame {
                     }
                     soluongf.setText("");
 
-                    int tongtien = 0;
+                   
                     for(ProductInfor item : listProductInforXuat){
                         tongtien+=(item.getGiaBan() * item.getSoLuong());
                         tongTienf.setText(tongtien+"");
@@ -314,23 +314,19 @@ public class XuatKho extends JFrame {
             }
 
             layDulieu();
-
         });
-        
-        
         
         // Nut xuat
         xuat = new JButton();
-        xuat.setBounds(622, 722, 111, 54);
+        xuat.setBounds(1206, 716, 174, 42);
         xuat.setContentAreaFilled(false);
         xuat.setBorderPainted(false);
         xuat.setFocusPainted(false);
         xuat.addActionListener(e -> {
-           
             try {
             // Tạo đối tượng InboundRequest
             OutboundRequest requestPayload = new OutboundRequest();
-
+System.out.println(requestPayload.tenNguoiXuatHang);
             // Tạo danh sách sản phẩm
             List<ProductDTO> productList = new ArrayList<>();
             
@@ -343,7 +339,7 @@ public class XuatKho extends JFrame {
             }
 
             requestPayload.danhSachSanPham = productList;
-
+            requestPayload.tongHoaDon=tongtien;
             // Chuyển đối tượng InboundRequest thành JSON
             ObjectMapper objectMapper = new ObjectMapper();
             String requestBody = objectMapper.writeValueAsString(requestPayload);
@@ -422,18 +418,9 @@ public class XuatKho extends JFrame {
             eee.printStackTrace();
         }
 
+
         });
 
-        // //Nut nhap
-        // nhapHang = new JButton();
-        // nhapHang.setBounds(1206, 716, 174, 42);
-        // nhapHang.setContentAreaFilled(false);
-        // nhapHang.setBorderPainted(false);
-        // nhapHang.setFocusPainted(false);
-        // nhapHang.addActionListener(e -> {
-           
-
-        // });
 
         //Field so luong
         soluongf = new JTextField();
@@ -531,9 +518,10 @@ public class XuatKho extends JFrame {
         this.add(timf);
         this.add(soluongf);
         this.add(tongTienf);
-        this.add(nhapHang);
         this.add(xuat);
+        this.add(them);
         this.add(tim);
+        
         init();
     }
 
