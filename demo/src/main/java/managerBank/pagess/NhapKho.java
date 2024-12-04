@@ -36,6 +36,7 @@ import managerBank.DTOS.ProductInfor;
 public class NhapKho  extends  JFrame{
     JTextField timf;
     JButton tim;
+    int tongtien = 0;
     JTextField soluongf;
     JButton them;
     JButton nhapHang;
@@ -300,7 +301,7 @@ allProduct.addMouseListener(new MouseAdapter() {
                     }
                     soluongf.setText("");
 
-                    int tongtien = 0;
+                    
                     for(ProductInfor item : listProductInforNhap){
                         tongtien+=(item.getGiaBan() * item.getSoLuong());
                         tongTienf.setText(tongtien+"");
@@ -348,7 +349,7 @@ allProduct.addMouseListener(new MouseAdapter() {
             }
 
             requestPayload.danhSachSanPham = productList;
-
+            requestPayload.tongHoaDon=tongtien;
             // Chuyển đối tượng InboundRequest thành JSON
             ObjectMapper objectMapper = new ObjectMapper();
             String requestBody = objectMapper.writeValueAsString(requestPayload);

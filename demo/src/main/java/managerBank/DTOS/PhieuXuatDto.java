@@ -1,45 +1,44 @@
 package managerBank.DTOS;
 
-import java.sql.Timestamp;
-
 public class PhieuXuatDto {
-    private int idPhieuXuat;
-    private String nguoiXuat;
-    private Timestamp ngayTao;
-    private int tongHoaDon;
+    private int ma_phieu_xuat;
+    private String nguoi_xuat;
+    private String ngay_xuat;
+    private int tong_hoa_don;
 
-    public int getIdPhieuXuat() {
-        return idPhieuXuat;
+    public int getMa_phieu_xuat() {
+        return ma_phieu_xuat;
     }
 
-    public void setIdPhieuXuat(int idPhieuXuat) {
-        this.idPhieuXuat = idPhieuXuat;
+    public void setMa_phieu_xuat(int ma_phieu_xuat) {
+        this.ma_phieu_xuat = ma_phieu_xuat;
     }
 
-    public String getNguoiXuat() {
-        return nguoiXuat;
+    public String getNguoi_xuat() {
+        return nguoi_xuat;
     }
 
-    public void setNguoiXuat(String nguoiXuat) {
-        this.nguoiXuat = nguoiXuat;
+    public void setNguoi_xuat(String nguoi_xuat) {
+        this.nguoi_xuat = nguoi_xuat;
     }
 
-    public Timestamp getNgayTao() {
-        return ngayTao;
+    public String getNgay_xuat() {
+        return ngay_xuat;
     }
 
-    public void setNgayTao(Timestamp ngayTao) {
-        this.ngayTao = ngayTao;
+    public void setNgay_xuat(String ngay_xuat) {
+        this.ngay_xuat = ngay_xuat;
     }
 
-    public int getTongHoaDon() {
-        return tongHoaDon;
+    public int getTong_hoa_don() {
+        return tong_hoa_don;
     }
 
-    public void setTongHoaDon(int tongHoaDon) {
-        this.tongHoaDon = tongHoaDon;
+    public void setTong_hoa_don(int tong_hoa_don) {
+        this.tong_hoa_don = tong_hoa_don;
     }
 
+   
 
  
        

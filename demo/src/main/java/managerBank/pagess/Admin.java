@@ -21,28 +21,33 @@ import javax.swing.table.JTableHeader;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import managerBank.DTOS.PhieuNhapDto;
+import managerBank.DTOS.ProductInfor;
 
-public class PhieuNhap extends JFrame {
-     JButton dash;
+public class Admin extends  JFrame{
+
+    JButton dash;
     JButton nhapKho;
     JButton xuatKho;
-    JButton PhieuNhap;
+    JButton phieuXuat;
     JButton phieuNhap;
     JButton profile;
     JButton logout;
-    JTable tongPhieuNhap;
+    List<ProductInfor> listProductInfor;
+    JTable allProduct ;
     JScrollPane scrollPane;
+    String[] columnName = {"ID", "ProductName","Category","Unit", "Price","Quantity"};
     DefaultTableModel model;
-    String[] columns = {"Ma Phieu Nhap","Ngay Nhap","Nguoi Nhap", "Tong Hoa Don"};
-    List<PhieuNhapDto> listPhieuInfor ;
-    
+
+
     private static HttpClient client = HttpClient.newHttpClient();
 
-    public void layDuLieu(){
+ 
+
+    public Admin (){
         
+
         try {
-            String uri = "http://" + Network.networkWork+":8080"+"/api/warehouse/getallimportbill";
+            String uri = "http://" + Network.networkWork+":8080"+"/api/products/getall";
             HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(uri))
                 .header("Content-Type", "application/json")
@@ -52,8 +57,8 @@ public class PhieuNhap extends JFrame {
 
             if (response.statusCode() == 200) {
                 ObjectMapper objectMapper = new ObjectMapper();
-                listPhieuInfor = objectMapper.readValue(response.body(), objectMapper.getTypeFactory().constructCollectionType(List.class,  PhieuNhapDto.class));       
-
+                listProductInfor = objectMapper.readValue(response.body(), objectMapper.getTypeFactory().constructCollectionType(List.class,  ProductInfor.class));       
+               
             } else {
                 System.err.println("Failed to fetch data. Status code: " + response.statusCode());
             }
@@ -61,59 +66,69 @@ public class PhieuNhap extends JFrame {
             e.printStackTrace();
         }
 
-    }
+        model = new DefaultTableModel(columnName, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Không cho phép chỉnh sửa bất kỳ ô nào
+            }
+        };
+allProduct = new JTable(model);
 
-     public PhieuNhap (){
-
-        layDuLieu();
-
-        model = new DefaultTableModel(columns, 0);
-        tongPhieuNhap = new JTable(model);
-
-        // Tùy chỉnh dữ liệu trong bảng
-        tongPhieuNhap.setFont(new Font("Segoe UI", Font.PLAIN, 14)); // Font của dữ liệu
-        tongPhieuNhap.setRowHeight(30); // Tăng chiều cao từng dòng
-        tongPhieuNhap.setForeground(Color.DARK_GRAY); // Màu chữ
-        tongPhieuNhap.setBackground(Color.WHITE); // Màu nền của bảng
-        tongPhieuNhap.setGridColor(Color.LIGHT_GRAY); // Màu đường kẻ
+// Tùy chỉnh dữ liệu trong bảng
+allProduct.setFont(new Font("Segoe UI", Font.PLAIN, 14)); // Font của dữ liệu
+allProduct.setRowHeight(30); // Tăng chiều cao từng dòng
+allProduct.setForeground(Color.DARK_GRAY); // Màu chữ
+allProduct.setBackground(Color.WHITE); // Màu nền của bảng
+allProduct.setGridColor(Color.LIGHT_GRAY); // Màu đường kẻ
 
 // Tùy chỉnh header của bảng
-JTableHeader header = tongPhieuNhap.getTableHeader();
+JTableHeader header = allProduct.getTableHeader();
 header.setFont(new Font("Segoe UI", Font.BOLD, 14)); // Chữ in đậm
 header.setForeground(Color.BLUE); // Màu chữ xanh
 header.setBackground(Color.LIGHT_GRAY); // Màu nền header (tuỳ chọn)
 header.setReorderingAllowed(false); // Không cho phép kéo đổi thứ tự cột
-        scrollPane = new JScrollPane(tongPhieuNhap);
-        this.add(scrollPane);
-        scrollPane.setBounds(270, 25, 1099, 733);        
 
-        // Căn giữa nội dung các ô trong bảng
+// Cuộn bảng
+scrollPane = new JScrollPane(allProduct);
+scrollPane.setBounds(291, 336, 682, 417);
+this.add(scrollPane);
+// Căn giữa nội dung các ô trong bảng
 DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 centerRenderer.setHorizontalAlignment(SwingConstants.CENTER); // Căn giữa nội dung trong ô
 
 // Áp dụng renderer cho tất cả các cột
-for (int i = 0; i < tongPhieuNhap.getColumnCount(); i++) {
-    tongPhieuNhap.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+for (int i = 0; i < allProduct.getColumnCount(); i++) {
+    allProduct.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
 }
 
-        for (PhieuNhapDto phieu : listPhieuInfor){
-            model.addRow(new Object[]{phieu.getMa_phieu_nhap(), phieu.getNgay_nhap(), phieu.getNguoi_nhap(), phieu.getTong_hoa_don()});
-           
-        }
+// Thêm dữ liệu vào bảng
+for (ProductInfor item : listProductInfor) {
+    model.addRow(new Object[]{
+        item.getIdProduct(), 
+        item.getProductName(), 
+        item.getCategory(),
+        item.getDonViTinh(), 
+        item.getGiaBan(), 
+        item.getSoLuong()
+    });
+}
 
+    
+            
+                
+    
 
         dash = new JButton();
-        dash.setBounds(45, 70, 174, 42);
+        dash.setBounds(45, 71, 174, 42);
         dash.setContentAreaFilled(false);
         dash.setBorderPainted(false);
         dash.setFocusPainted(false);
         dash.addActionListener(e -> {
            
-            new Dashboard2();
-            this.setVisible(false);
+
         });
         nhapKho = new JButton();
-        nhapKho.setBounds(45, 136, 174, 42);
+        nhapKho.setBounds(45, 400, 174, 42);
         nhapKho.setContentAreaFilled(false);
         nhapKho.setBorderPainted(false);
         nhapKho.setFocusPainted(false);
@@ -123,32 +138,33 @@ for (int i = 0; i < tongPhieuNhap.getColumnCount(); i++) {
             this.setVisible(false);
         });
         xuatKho = new JButton();
-        xuatKho.setBounds(45, 204, 174, 42);
+        xuatKho.setBounds(50, 400, 174, 42);
         xuatKho.setContentAreaFilled(false);
         xuatKho.setBorderPainted(false);
         xuatKho.setFocusPainted(false);
         xuatKho.addActionListener(e -> {
-            new XuatKho();
-            this.setVisible(false);
+           new XuatKho();
+           this.setVisible(false);
 
         });
-        PhieuNhap = new JButton();
-        PhieuNhap.setBounds(45, 274, 174, 42);
-        PhieuNhap.setContentAreaFilled(false);
-        PhieuNhap.setBorderPainted(false);
-        PhieuNhap.setFocusPainted(false);
-        PhieuNhap.addActionListener(e -> {
-           
+        phieuXuat = new JButton();
+        phieuXuat.setBounds(48, 190, 174, 42);
+        phieuXuat.setContentAreaFilled(false);
+        phieuXuat.setBorderPainted(false);
+        phieuXuat.setFocusPainted(false);
+        phieuXuat.addActionListener(e -> {
+           new PhieuXuat();
+           this.setVisible(false);
 
         });
         phieuNhap = new JButton();
-        phieuNhap.setBounds(45, 341, 174, 42);
+        phieuNhap.setBounds(45, 320, 174, 42);
         phieuNhap.setContentAreaFilled(false);
         phieuNhap.setBorderPainted(false);
         phieuNhap.setFocusPainted(false);
         phieuNhap.addActionListener(e -> {
-            new PhieuNhap();
-            this.setVisible(false);
+           new PhieuNhap();
+           this.setVisible(false);
 
         });
         profile = new JButton();
@@ -167,6 +183,7 @@ for (int i = 0; i < tongPhieuNhap.getColumnCount(); i++) {
         logout.setFocusPainted(false);
         logout.addActionListener(e -> {
            
+            
 
         });
 
@@ -175,34 +192,33 @@ for (int i = 0; i < tongPhieuNhap.getColumnCount(); i++) {
         this.add(nhapKho);
         this.add(xuatKho);
         this.add(phieuNhap);
-        this.add(PhieuNhap);
+        this.add(phieuXuat);
         this.add(profile);
         this.add(logout);
         this.add(dash);
-
         init();
     }
 
     public void init() {
 
         // Lay anh background
-        ImageIcon pre_background = new ImageIcon("demo\\src\\main\\java\\managerBank\\assets\\icon\\PhieuNhap.jpg");
+        ImageIcon pre_background = new ImageIcon("demo\\src\\main\\java\\managerBank\\assets\\icon\\trangadmin.jpg");
         // Image handle_background = pre_background.getImage().getScaledInstance(1000,
         // 800, Image.SCALE_SMOOTH);
         // ImageIcon icon_background = new ImageIcon(handle_background);
         // Set Icon background
         JLabel jLabel_background = new JLabel(pre_background);
-        jLabel_background.setBounds(0, 0, 1417, 868);
+        jLabel_background.setBounds(0, 0, 1000, 800);
         this.add(jLabel_background);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(1450, 900);
+        this.setSize(1000, 800);
         this.setTitle("Dashboard");
         this.setLayout(null);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
     public static void main(String[] args) {
-        new PhieuNhap();
+        new Admin();
     }
 }

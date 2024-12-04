@@ -1,5 +1,7 @@
 package managerBank.pagess;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -12,7 +14,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -48,7 +53,7 @@ public class PhieuXuat extends JFrame {
             if (response.statusCode() == 200) {
                 ObjectMapper objectMapper = new ObjectMapper();
                 listPhieuInfor = objectMapper.readValue(response.body(), objectMapper.getTypeFactory().constructCollectionType(List.class,  PhieuXuatDto.class));       
-               
+
             } else {
                 System.err.println("Failed to fetch data. Status code: " + response.statusCode());
             }
@@ -68,8 +73,32 @@ public class PhieuXuat extends JFrame {
         this.add(scrollPane);
         scrollPane.setBounds(270, 25, 1099, 733);        
         for (PhieuXuatDto phieu : listPhieuInfor){
-            model.addRow(new Object[]{phieu.getIdPhieuXuat(), phieu.getNguoiXuat(), phieu.getNgayTao(), phieu.getTongHoaDon()});
+            model.addRow(new Object[]{phieu.getMa_phieu_xuat(), phieu.getNguoi_xuat(), phieu.getNgay_xuat(), phieu.getTong_hoa_don()});
+           
         }
+
+        // Tùy chỉnh dữ liệu trong bảng
+        tongPhieuXuat.setFont(new Font("Segoe UI", Font.PLAIN, 14)); // Font của dữ liệu
+        tongPhieuXuat.setRowHeight(30); // Tăng chiều cao từng dòng
+        tongPhieuXuat.setForeground(Color.DARK_GRAY); // Màu chữ
+        tongPhieuXuat.setBackground(Color.WHITE); // Màu nền của bảng
+        tongPhieuXuat.setGridColor(Color.LIGHT_GRAY); // Màu đường kẻ
+
+// Tùy chỉnh header của bảng
+JTableHeader header = tongPhieuXuat.getTableHeader();
+header.setFont(new Font("Segoe UI", Font.BOLD, 14)); // Chữ in đậm
+header.setForeground(Color.BLUE); // Màu chữ xanh
+header.setBackground(Color.LIGHT_GRAY); // Màu nền header (tuỳ chọn)
+header.setReorderingAllowed(false); // Không cho phép kéo đổi thứ tự cột
+
+// Căn giữa nội dung các ô trong bảng
+DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+centerRenderer.setHorizontalAlignment(SwingConstants.CENTER); // Căn giữa nội dung trong ô
+
+// Áp dụng renderer cho tất cả các cột
+for (int i = 0; i < tongPhieuXuat.getColumnCount(); i++) {
+    tongPhieuXuat.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+}
 
 
         dash = new JButton();
