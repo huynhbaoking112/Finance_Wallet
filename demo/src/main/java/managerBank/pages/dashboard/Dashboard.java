@@ -1,25 +1,32 @@
 package managerBank.pages.dashboard;
 
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.io.File;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 import managerBank.Config.ConDB;
 import managerBank.DTO.TranferRepond;
 import managerBank.Model.UserDashboard;
+import managerBank.Service.TransactionServer;
 import managerBank.pages.login.Login;
 import managerBank.pages.profile.Profile;
 import managerBank.pages.tranfer.TransferConfirmationUI;
 import managerBank.pages.tranfer.TransferUI;
 import managerBank.pages.transaction.TransactionFrame;
-import managerBank.Service.TransactionServer;
 import managerBank.utils.EmailSender;
 import managerBank.utils.QRCodeGenerator;
 import managerBank.utils.QRCodeReaderExample;
 import managerBank.utils.Validation;
-
-import java.awt.*;
-import java.io.File;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 
 public class Dashboard extends JFrame {
     ConDB conDB = new ConDB();
