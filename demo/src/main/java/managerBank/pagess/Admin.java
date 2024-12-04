@@ -21,7 +21,6 @@ import javax.swing.table.JTableHeader;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import managerBank.DTOS.ProductInfor;
 
 public class Admin extends  JFrame{
 
@@ -32,11 +31,12 @@ public class Admin extends  JFrame{
     JButton phieuNhap;
     JButton profile;
     JButton logout;
-    List<ProductInfor> listProductInfor;
+    List<LoiDTO> listProductInfor;
     JTable allProduct ;
     JScrollPane scrollPane;
-    String[] columnName = {"ID", "ProductName","Category","Unit", "Price","Quantity"};
+    String[] columnName = {"ID", "Message"};
     DefaultTableModel model;
+    JLabel tieuDe = new JLabel("Admin");
 
 
     private static HttpClient client = HttpClient.newHttpClient();
@@ -46,8 +46,9 @@ public class Admin extends  JFrame{
     public Admin (){
         
 
+
         try {
-            String uri = "http://" + Network.networkWork+":8080"+"/api/products/getall";
+            String uri = "http://" + Network.networkWork+":8080"+"/api/warehouse/getallerror";
             HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(uri))
                 .header("Content-Type", "application/json")
@@ -57,7 +58,7 @@ public class Admin extends  JFrame{
 
             if (response.statusCode() == 200) {
                 ObjectMapper objectMapper = new ObjectMapper();
-                listProductInfor = objectMapper.readValue(response.body(), objectMapper.getTypeFactory().constructCollectionType(List.class,  ProductInfor.class));       
+                listProductInfor = objectMapper.readValue(response.body(), objectMapper.getTypeFactory().constructCollectionType(List.class,  LoiDTO.class));       
                
             } else {
                 System.err.println("Failed to fetch data. Status code: " + response.statusCode());
@@ -102,20 +103,18 @@ for (int i = 0; i < allProduct.getColumnCount(); i++) {
 }
 
 // Thêm dữ liệu vào bảng
-for (ProductInfor item : listProductInfor) {
+for (LoiDTO item : listProductInfor) {
     model.addRow(new Object[]{
-        item.getIdProduct(), 
-        item.getProductName(), 
-        item.getCategory(),
-        item.getDonViTinh(), 
-        item.getGiaBan(), 
-        item.getSoLuong()
+        item.getIdlog(),
+        item.getLoi(),
     });
 }
 
     
-            
-                
+        tieuDe.setBounds(476, 177,215,64);
+        tieuDe.setFont(new Font("Arial", Font.BOLD, 40));
+        tieuDe.setForeground(Color.WHITE);
+        this.add(tieuDe);
     
 
         dash = new JButton();
@@ -153,7 +152,7 @@ for (ProductInfor item : listProductInfor) {
         phieuXuat.setBorderPainted(false);
         phieuXuat.setFocusPainted(false);
         phieuXuat.addActionListener(e -> {
-           new PhieuXuat();
+           new AdminPhieuXuat();
            this.setVisible(false);
 
         });
@@ -163,7 +162,7 @@ for (ProductInfor item : listProductInfor) {
         phieuNhap.setBorderPainted(false);
         phieuNhap.setFocusPainted(false);
         phieuNhap.addActionListener(e -> {
-           new PhieuNhap();
+           new AdminPhieuNhap();
            this.setVisible(false);
 
         });
