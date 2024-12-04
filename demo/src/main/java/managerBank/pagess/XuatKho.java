@@ -41,6 +41,7 @@ public class XuatKho extends JFrame {
         xuat.setFocusPainted(false);
         xuat.addActionListener(e -> {
            
+            
 
         });
 
@@ -95,6 +96,7 @@ public class XuatKho extends JFrame {
         xuatKho.setBorderPainted(false);
         xuatKho.setFocusPainted(false);
         xuatKho.addActionListener(e -> {
+
            
 
         });
@@ -159,7 +161,7 @@ public class XuatKho extends JFrame {
     public void init() {
 
         // Lay anh background
-        ImageIcon pre_background = new ImageIcon("demo\\src\\main\\java\\managerBank\\assets\\icon\\nhapkho.jpg");
+        ImageIcon pre_background = new ImageIcon("demo\\src\\main\\java\\managerBank\\assets\\icon\\xuatne.jpg");
         // Image handle_background = pre_background.getImage().getScaledInstance(1000,
         // 800, Image.SCALE_SMOOTH);
         // ImageIcon icon_background = new ImageIcon(handle_background);
