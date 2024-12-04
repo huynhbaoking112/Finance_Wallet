@@ -1,5 +1,11 @@
 package managerBank.pagess;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.List;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -7,6 +13,10 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import managerBank.DTOS.PhieuXuatDto;
 
 public class PhieuXuat extends JFrame {
      JButton dash;
@@ -20,20 +30,46 @@ public class PhieuXuat extends JFrame {
     JScrollPane scrollPane;
     DefaultTableModel model;
     String[] columns = {"Ma Phieu Xuat","Ngay Xuat","Nguoi Xuat", "Tong Hoa Don"};
+    List<PhieuXuatDto> listPhieuInfor ;
     
+    private static HttpClient client = HttpClient.newHttpClient();
 
     public void layDuLieu(){
         
+        try {
+            String uri = "http://" + Network.networkWork+":8080"+"/api/warehouse/getallexportbill";
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(uri))
+                .header("Content-Type", "application/json")
+                .GET()
+                .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                ObjectMapper objectMapper = new ObjectMapper();
+                listPhieuInfor = objectMapper.readValue(response.body(), objectMapper.getTypeFactory().constructCollectionType(List.class,  PhieuXuatDto.class));       
+               
+            } else {
+                System.err.println("Failed to fetch data. Status code: " + response.statusCode());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
      public PhieuXuat (){
+
+        layDuLieu();
 
         model = new DefaultTableModel(columns, 0);
         tongPhieuXuat = new JTable(model);
         scrollPane = new JScrollPane(tongPhieuXuat);
         this.add(scrollPane);
         scrollPane.setBounds(270, 25, 1099, 733);        
-
+        for (PhieuXuatDto phieu : listPhieuInfor){
+            model.addRow(new Object[]{phieu.getIdPhieuXuat(), phieu.getNguoiXuat(), phieu.getNgayTao(), phieu.getTongHoaDon()});
+        }
 
 
         dash = new JButton();
