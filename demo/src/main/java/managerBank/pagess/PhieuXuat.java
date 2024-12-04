@@ -1,9 +1,12 @@
 package managerBank.pagess;
-    
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class PhieuXuat extends JFrame {
      JButton dash;
@@ -13,7 +16,26 @@ public class PhieuXuat extends JFrame {
     JButton phieuNhap;
     JButton profile;
     JButton logout;
+    JTable tongPhieuXuat;
+    JScrollPane scrollPane;
+    DefaultTableModel model;
+    String[] columns = {"Ma Phieu Xuat","Ngay Xuat","Nguoi Xuat", "Tong Hoa Don"};
+    
+
+    public void layDuLieu(){
+        
+    }
+
      public PhieuXuat (){
+
+        model = new DefaultTableModel(columns, 0);
+        tongPhieuXuat = new JTable(model);
+        scrollPane = new JScrollPane(tongPhieuXuat);
+        this.add(scrollPane);
+        scrollPane.setBounds(270, 25, 1099, 733);        
+
+
+
         dash = new JButton();
         dash.setBounds(45, 70, 174, 42);
         dash.setContentAreaFilled(false);
